@@ -8,9 +8,10 @@ using ImpactWebsite.Data;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170504234538_AddAllBasicEntities")]
+    partial class AddAllBasicEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -23,8 +24,6 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("CompanyName");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -33,15 +32,9 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<DateTime>("ModifiedDate");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -58,8 +51,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<long>("UserId");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -139,8 +130,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<long>("OrderHeaderId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<DateTime>("DeliveredDate");
 
                     b.Property<DateTime>("ModifiedDate");
@@ -163,7 +152,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("OrderHeaderId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("OrderHeader");
                 });
@@ -224,6 +213,54 @@ namespace ImpactWebsite.Data.Migrations
                     b.ToTable("UnitPrice");
                 });
 
+            modelBuilder.Entity("ImpactWebsite.Models.User", b =>
+                {
+                    b.Property<long>("UserId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("CompanyName");
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("Id");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<DateTime>("ModifiedDate");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -278,9 +315,13 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired();
 
+                    b.Property<long?>("UserId1");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserClaims");
                 });
@@ -296,9 +337,13 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired();
 
+                    b.Property<long?>("UserId1");
+
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserLogins");
                 });
@@ -309,9 +354,13 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<string>("RoleId");
 
+                    b.Property<long?>("UserId1");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -340,9 +389,10 @@ namespace ImpactWebsite.Data.Migrations
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderHeader", b =>
                 {
-                    b.HasOne("ImpactWebsite.Models.ApplicationUser")
+                    b.HasOne("ImpactWebsite.Models.User")
                         .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -359,6 +409,10 @@ namespace ImpactWebsite.Data.Migrations
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ImpactWebsite.Models.User")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
@@ -367,6 +421,10 @@ namespace ImpactWebsite.Data.Migrations
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ImpactWebsite.Models.User")
+                        .WithMany("Logins")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
@@ -380,6 +438,10 @@ namespace ImpactWebsite.Data.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ImpactWebsite.Models.User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId1");
                 });
         }
     }
