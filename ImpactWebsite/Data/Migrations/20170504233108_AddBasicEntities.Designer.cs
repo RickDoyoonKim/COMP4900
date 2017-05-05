@@ -8,9 +8,10 @@ using ImpactWebsite.Data;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170504233108_AddBasicEntities")]
+    partial class AddBasicEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -23,8 +24,6 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("CompanyName");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -33,15 +32,9 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<DateTime>("ModifiedDate");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -58,8 +51,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<long>("UserId");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -89,139 +80,11 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate");
 
-                    b.Property<long?>("OrderHeaderId");
-
                     b.Property<int>("ShareNumber");
 
                     b.HasKey("InvestmentId");
 
-                    b.HasIndex("OrderHeaderId");
-
                     b.ToTable("Investment");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.Module", b =>
-                {
-                    b.Property<long>("ModuleId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("DeliveryDays");
-
-                    b.Property<string>("Description");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<long>("UnitPriceId");
-
-                    b.HasKey("ModuleId");
-
-                    b.ToTable("Module");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.NewsLetterUser", b =>
-                {
-                    b.Property<long>("NewsLetterUserId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<bool>("isSubscribed");
-
-                    b.HasKey("NewsLetterUserId");
-
-                    b.ToTable("NewsLetterUser");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.OrderHeader", b =>
-                {
-                    b.Property<long>("OrderHeaderId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<DateTime>("DeliveredDate");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("NoteFromAdmin");
-
-                    b.Property<string>("NoteFromUser");
-
-                    b.Property<int>("OrderNum");
-
-                    b.Property<string>("OrderStatus");
-
-                    b.Property<DateTime>("OrderedDate");
-
-                    b.Property<long>("PromotionId");
-
-                    b.Property<string>("SalesRep");
-
-                    b.Property<long>("UserId");
-
-                    b.HasKey("OrderHeaderId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("OrderHeader");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.OrderLine", b =>
-                {
-                    b.Property<long>("OrderLineId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<long>("ModuleId");
-
-                    b.Property<long>("OrderHeaderId");
-
-                    b.HasKey("OrderLineId");
-
-                    b.ToTable("OrderLine");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.Promotion", b =>
-                {
-                    b.Property<long>("PromotionId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateFrom");
-
-                    b.Property<DateTime>("DateTo");
-
-                    b.Property<string>("Description");
-
-                    b.Property<decimal>("DiscountRate");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("PromotionName");
-
-                    b.HasKey("PromotionId");
-
-                    b.ToTable("Promotion");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.UnitPrice", b =>
-                {
-                    b.Property<long>("UnitPriceId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateEffectFrom");
-
-                    b.Property<DateTime>("DateEffectTo");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<decimal>("UnitPriceValue");
-
-                    b.HasKey("UnitPriceId");
-
-                    b.ToTable("UnitPrice");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -329,20 +192,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.Investment", b =>
-                {
-                    b.HasOne("ImpactWebsite.Models.OrderHeader")
-                        .WithMany("Investments")
-                        .HasForeignKey("OrderHeaderId");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.OrderHeader", b =>
-                {
-                    b.HasOne("ImpactWebsite.Models.ApplicationUser")
-                        .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
