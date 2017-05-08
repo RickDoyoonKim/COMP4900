@@ -48,3 +48,28 @@ textarea {
         display: none;
     }
 }
+
+/* Impact Website */
+ul#module-list li {
+    height: 160px;
+}
+
+ul#module-list li img:hover {
+    box-shadow: 1px 1px 7px #777;
+}
+
+ul#module-list li img {
+    box-shadow: 1px 1px 5px #999;
+    border: none;
+    padding: 0;
+}
+
+ul#module-list li a, ul#album-details li a {
+    text-decoration: none;
+}
+
+ul#module-list li a:hover {
+    background: none;
+    text-shadow: 1px 1px 2px #bbb;
+    color: #363430;
+}

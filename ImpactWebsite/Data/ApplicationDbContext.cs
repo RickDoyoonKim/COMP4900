@@ -18,14 +18,14 @@ namespace ImpactWebsite.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<Investment>();
-            builder.Entity<Module>();
-            builder.Entity<NewsLetterUser>();
-            builder.Entity<OrderHeader>();
-            builder.Entity<OrderLine>();
-            builder.Entity<Promotion>();
-            builder.Entity<UnitPrice>();
-            builder.Entity<ApplicationUser>();
         }
+
+        public DbSet<Investment> Investments { get; set; }
+        public DbSet<Module> Modules { get; set; }
+        public DbSet<NewsLetterUser> NewsLetterUsers { get; set; }
+        public DbSet<OrderHeader> OrderHeaders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<UnitPrice> UnitPrices { get; set; }
     }
 }
