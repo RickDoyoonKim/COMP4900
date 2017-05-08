@@ -8,6 +8,8 @@ namespace ImpactWebsite.Models
     public class Module : BaseEntity
     {
         public Int64 ModuleId { get; set; }
+        public string ModuleName { get; set; }
+        public string ModuleUrl { get; set; }
         public int DeliveryDays { get; set; }
         public string Description { get; set; }
 
