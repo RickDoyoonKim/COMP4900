@@ -85,6 +85,7 @@ namespace ImpactWebsite
             });
 
             ModuleSeedData.Initialize(db);
+
         }
     }
 }
