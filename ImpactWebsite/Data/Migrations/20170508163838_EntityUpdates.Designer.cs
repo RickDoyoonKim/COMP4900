@@ -8,9 +8,10 @@ using ImpactWebsite.Data;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170508163838_EntityUpdates")]
+    partial class EntityUpdates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -97,7 +98,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("OrderHeaderId");
 
-                    b.ToTable("Investments");
+                    b.ToTable("Investment");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Module", b =>
@@ -111,15 +112,11 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate");
 
-                    b.Property<string>("ModuleName");
-
-                    b.Property<string>("ModuleUrl");
-
                     b.Property<long>("UnitPriceId");
 
                     b.HasKey("ModuleId");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Module");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.NewsLetterUser", b =>
@@ -135,7 +132,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("NewsLetterUserId");
 
-                    b.ToTable("NewsLetterUsers");
+                    b.ToTable("NewsLetterUser");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderHeader", b =>
@@ -169,7 +166,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeaders");
+                    b.ToTable("OrderHeader");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderLine", b =>
@@ -185,7 +182,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("OrderLineId");
 
-                    b.ToTable("OrderLines");
+                    b.ToTable("OrderLine");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Promotion", b =>
@@ -207,7 +204,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("PromotionId");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("Promotion");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.UnitPrice", b =>
@@ -225,7 +222,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("UnitPriceId");
 
-                    b.ToTable("UnitPrices");
+                    b.ToTable("UnitPrice");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>

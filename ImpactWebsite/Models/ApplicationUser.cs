@@ -9,10 +9,13 @@ namespace ImpactWebsite.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
-        public Int64 UserId { get; set; }
+        //Auto generated
+        //public Int64 UserId { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CompanyName { get; set; }
+        public bool NewsletterRequired { get; set; }
 
         public DateTime ModifiedDate { get; set; }
 
