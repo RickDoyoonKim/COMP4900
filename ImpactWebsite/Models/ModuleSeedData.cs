@@ -1,25 +1,23 @@
-﻿using System;
+﻿using ImpactWebsite.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ImpactWebsite.Data;
-using ImpactWebsite.Models;
 
-namespace ImpactWebsite.Controllers
+namespace ImpactWebsite.Models
 {
-    public class HomeController : Controller
+    public class ModuleSeedData
     {
-
-        private ApplicationDbContext _db;
-
-        public IActionResult Index()
+        public static void Initialize(ApplicationDbContext db)
         {
-            //temp data
-            var modules = new List<Module>();
-            if (!modules.Any())
+            getModule(db);
+        }
+
+        private static void getModule(ApplicationDbContext db)
+        {
+            if (!db.Modules.Any())
             {
-                modules.Add(new Module
+                db.Modules.Add(new Module
                 {
                     ModuleName = "Operational blueprint and asset-level data",
                     ModuleUrl = "~/Images/unique_insight.jpg",
@@ -27,7 +25,7 @@ namespace ImpactWebsite.Controllers
                     Description = "Operational blueprint and asset-level data Description",
                 });
 
-                modules.Add(new Module
+                db.Modules.Add(new Module
                 {
                     ModuleName = "Social Impact metrics",
                     ModuleUrl = "~/Images/our_methodology.jpg",
@@ -35,7 +33,7 @@ namespace ImpactWebsite.Controllers
                     Description = "Social Impact metrics Description",
                 });
 
-                modules.Add(new Module
+                db.Modules.Add(new Module
                 {
                     ModuleName = "Environmental impact metrics",
                     ModuleUrl = "~/Images/sustainability.jpg",
@@ -43,26 +41,6 @@ namespace ImpactWebsite.Controllers
                     Description = "Environmental impact metrics Description",
                 });
             }
-            return View(modules);
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View();
         }
     }
 }
