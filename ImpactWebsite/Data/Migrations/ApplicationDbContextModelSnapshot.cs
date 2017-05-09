@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using ImpactWebsite.Data;
+using ImpactWebsite.Models;
 
 namespace ImpactWebsite.Data.Migrations
 {
@@ -23,7 +24,8 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("CompanyName");
+                    b.Property<string>("CompanyName")
+                        .HasMaxLength(160);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -33,9 +35,13 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(160);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(160);
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -83,9 +89,12 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<decimal>("EstimateValue");
 
-                    b.Property<string>("ISIN");
+                    b.Property<string>("ISIN")
+                        .HasMaxLength(160);
 
-                    b.Property<string>("InvestmentName");
+                    b.Property<string>("InvestmentName")
+                        .IsRequired()
+                        .HasMaxLength(160);
 
                     b.Property<DateTime>("ModifiedDate");
 
@@ -111,9 +120,12 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate");
 
-                    b.Property<string>("ModuleName");
+                    b.Property<string>("ModuleName")
+                        .IsRequired()
+                        .HasMaxLength(160);
 
-                    b.Property<string>("ModuleUrl");
+                    b.Property<string>("ModuleUrl")
+                        .HasMaxLength(1024);
 
                     b.Property<long>("UnitPriceId");
 
@@ -127,7 +139,8 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<long>("NewsLetterUserId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
                     b.Property<DateTime>("ModifiedDate");
 
@@ -155,13 +168,14 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<int>("OrderNum");
 
-                    b.Property<string>("OrderStatus");
+                    b.Property<int>("OrderStatus");
 
                     b.Property<DateTime>("OrderedDate");
 
                     b.Property<long>("PromotionId");
 
-                    b.Property<string>("SalesRep");
+                    b.Property<string>("SalesRep")
+                        .HasMaxLength(160);
 
                     b.Property<long>("UserId");
 
@@ -203,7 +217,9 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate");
 
-                    b.Property<string>("PromotionName");
+                    b.Property<string>("PromotionName")
+                        .IsRequired()
+                        .HasMaxLength(160);
 
                     b.HasKey("PromotionId");
 
