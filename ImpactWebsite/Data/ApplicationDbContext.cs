@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ImpactWebsite.Models;
 
+
 namespace ImpactWebsite.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -18,6 +19,7 @@ namespace ImpactWebsite.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.RemovePluralizingTableNameConvention();
         }
 
         public DbSet<Investment> Investments { get; set; }

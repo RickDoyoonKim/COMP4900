@@ -5,15 +5,15 @@
 }
 <div class="jumbotron text-center">
     <h1>Impact Website</h1>
-    @Html.Raw("\n")
-    <img src="~/Images/background_1.jpg" width="50%" height="50%" class="center-block" />
+    <hr />
+    <img src="~/Images/background_1.jpg" style="width:50%; height:50%" class="center-block" />
 </div>
 <ul class="row list-unstyled" id="module-list">
     @foreach (var module in Model)
     {        
         <li class="col-lg-6 col-md-6 container text-center">
             <a asp-controller="Module" asp-action="Details" asp-route-id="@module.ModuleId">
-                <img alt="@module.ModuleName" src="@Url.Content(@module.ModuleUrl)" width="50%" height="50%" />
+                <img alt="@module.ModuleName" src="@Url.Content(@module.ModuleUrl)" style="width:50%; height:50%" />
                 <h4>@module.ModuleName</h4>
                 <cite>@module.Description</cite>
             </a>          
