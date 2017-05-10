@@ -85,6 +85,7 @@ namespace ImpactWebsite
             });
 
             ModuleSeedData.InitializeModuleSeedAsync(context).Wait();
+            RoleSeedData.Initialize(app.ApplicationServices);
         }
     }
 }
