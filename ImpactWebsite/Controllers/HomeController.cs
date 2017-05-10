@@ -10,16 +10,21 @@ namespace ImpactWebsite.Controllers
 {
     public class HomeController : Controller
     {
-
         private ApplicationDbContext _db;
 
+        public HomeController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
-            //temp data
-            var modules = new List<Module>();
-            if (!modules.Any())
+            //temp data            
+            var tempModules = new List<Module>();
+            if (!tempModules.Any())
             {
-                modules.Add(new Module
+                tempModules.Add(new Module
                 {
                     ModuleName = "Operational blueprint and asset-level data",
                     ModuleUrl = "~/Images/unique_insight.jpg",
@@ -27,7 +32,7 @@ namespace ImpactWebsite.Controllers
                     Description = "Operational blueprint and asset-level data Description",
                 });
 
-                modules.Add(new Module
+                tempModules.Add(new Module
                 {
                     ModuleName = "Social Impact metrics",
                     ModuleUrl = "~/Images/our_methodology.jpg",
@@ -35,16 +40,54 @@ namespace ImpactWebsite.Controllers
                     Description = "Social Impact metrics Description",
                 });
 
-                modules.Add(new Module
+                tempModules.Add(new Module
                 {
                     ModuleName = "Environmental impact metrics",
                     ModuleUrl = "~/Images/sustainability.jpg",
                     DeliveryDays = 3,
                     Description = "Environmental impact metrics Description",
                 });
+
+                tempModules.Add(new Module
+                {
+                    ModuleName = "Governance and controversies",
+                    ModuleUrl = "~/Images/sustainability.jpg",
+                    DeliveryDays = 3,
+                    Description = "Governance and controversies Description",
+                });
+
+                tempModules.Add(new Module
+                {
+                    ModuleName = "Upstream and downstream supplier analysis",
+                    ModuleUrl = "~/Images/sustainability.jpg",
+                    DeliveryDays = 3,
+                    Description = "Upstream and downstream supplier analysis Description",
+                });
+
+                tempModules.Add(new Module
+                {
+                    ModuleName = "Regulatory, climate-realted and other risk analysis",
+                    ModuleUrl = "~/Images/sustainability.jpg",
+                    DeliveryDays = 3,
+                    Description = "Regulatory, climate-realted and other risk analysis Description",
+                });
+
+                tempModules.Add(new Module
+                {
+                    ModuleName = "Benchmarking and targets",
+                    ModuleUrl = "~/Images/sustainability.jpg",
+                    DeliveryDays = 3,
+                    Description = "Benchmarking and targets Description",
+                });
             }
-            return View(modules);
+
+            var modules = _db.Modules.ToList();
+        
+
+            return View(tempModules);
         }
+
+
 
         public IActionResult About()
         {

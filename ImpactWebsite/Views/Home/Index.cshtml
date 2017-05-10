@@ -3,19 +3,20 @@
 @{
     ViewBag.Title = "Home Page";
 }
-<div class="jumbotron">
+<div class="jumbotron text-center">
     <h1>Impact Website</h1>
-    <img src="~/Images/background_1.jpg" width="50%" height="50%" />
+    @Html.Raw("\n")
+    <img src="~/Images/background_1.jpg" width="50%" height="50%" class="center-block" />
 </div>
-<ul class="row list-unstyled" id="album-list">
+<ul class="row list-unstyled" id="module-list">
     @foreach (var module in Model)
-    {
-        <li class="col-lg-4 col-md-4 container">
+    {        
+        <li class="col-lg-6 col-md-6 container text-center">
             <a asp-controller="Module" asp-action="Details" asp-route-id="@module.ModuleId">
                 <img alt="@module.ModuleName" src="@Url.Content(@module.ModuleUrl)" width="50%" height="50%" />
                 <h4>@module.ModuleName</h4>
-                <p>@module.Description</p>
-            </a>
+                <cite>@module.Description</cite>
+            </a>          
         </li>
     }
 </ul>
