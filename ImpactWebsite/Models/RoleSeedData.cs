@@ -70,7 +70,7 @@ namespace ImpactWebsite.Models
             if (!context.Users.Any(u => u.UserName == admin.UserName))
             {
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(admin, "P@$$w0rd");
+                var hashed = password.HashPassword(admin, "Password1!");
                 admin.PasswordHash = hashed;
 
                 var userStore = new UserStore<ApplicationUser>(context);
@@ -80,7 +80,7 @@ namespace ImpactWebsite.Models
             if (!context.Users.Any(u => u.UserName == member.UserName))
             {
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(member, "P@$$w0rd");
+                var hashed = password.HashPassword(member, "Password2!");
                 member.PasswordHash = hashed;
 
                 var userStore = new UserStore<ApplicationUser>(context);
