@@ -79,7 +79,7 @@ namespace ImpactWebsite.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("ApplicationUser");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Investment", b =>
@@ -106,7 +106,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("OrderHeaderId");
 
-                    b.ToTable("Investments");
+                    b.ToTable("Investment");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Module", b =>
@@ -131,7 +131,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("ModuleId");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Module");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.NewsLetterUser", b =>
@@ -148,7 +148,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("NewsLetterUserId");
 
-                    b.ToTable("NewsLetterUsers");
+                    b.ToTable("NewsLetterUser");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderHeader", b =>
@@ -183,7 +183,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeaders");
+                    b.ToTable("OrderHeader");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderLine", b =>
@@ -199,7 +199,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("OrderLineId");
 
-                    b.ToTable("OrderLines");
+                    b.ToTable("OrderLine");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Promotion", b =>
@@ -223,7 +223,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("PromotionId");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("Promotion");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.UnitPrice", b =>
@@ -241,7 +241,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("UnitPriceId");
 
-                    b.ToTable("UnitPrices");
+                    b.ToTable("UnitPrice");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -264,7 +264,7 @@ namespace ImpactWebsite.Data.Migrations
                         .IsUnique()
                         .HasName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -283,7 +283,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("IdentityRoleClaim<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
@@ -302,7 +302,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("IdentityUserClaim<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
@@ -320,7 +320,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("IdentityUserLogin<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
@@ -333,7 +333,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("IdentityUserRole<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserToken<string>", b =>
@@ -348,7 +348,7 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("IdentityUserToken<string>");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Investment", b =>

@@ -15,6 +15,7 @@ namespace ImpactWebsite.Models
         [StringLength(160, MinimumLength = 2)]
         public string ModuleName { get; set; }
 
+        // Module Image
         [Display(Name = "Module Image URL")]
         [StringLength(1024)]
         public string ModuleUrl { get; set; }
