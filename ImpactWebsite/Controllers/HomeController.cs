@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ImpactWebsite.Data;
 using ImpactWebsite.Models;
 
+//test
 namespace ImpactWebsite.Controllers
 {
     public class HomeController : Controller
