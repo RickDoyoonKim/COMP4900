@@ -11,41 +11,27 @@ namespace ImpactWebsite.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext _context;
 
-        private ApplicationDbContext _db;
-
-        public IActionResult Index()
+        public HomeController(ApplicationDbContext context)
         {
-            //temp data
-            var modules = new List<Module>();
-            if (!modules.Any())
-            {
-                modules.Add(new Module
-                {
-                    ModuleName = "Operational blueprint and asset-level data",
-                    ModuleUrl = "~/Images/unique_insight.jpg",
-                    DeliveryDays = 3,
-                    Description = "Operational blueprint and asset-level data Description",
-                });
+            _context = context;
+        }
 
-                modules.Add(new Module
-                {
-                    ModuleName = "Social Impact metrics",
-                    ModuleUrl = "~/Images/our_methodology.jpg",
-                    DeliveryDays = 3,
-                    Description = "Social Impact metrics Description",
-                });
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var modules = _context.Modules.ToList();
 
-                modules.Add(new Module
-                {
-                    ModuleName = "Environmental impact metrics",
-                    ModuleUrl = "~/Images/sustainability.jpg",
-                    DeliveryDays = 3,
-                    Description = "Environmental impact metrics Description",
-                });
-            }
             return View(modules);
         }
+
+        /*
+        private Task<List<Module>> GetModules(ApplicationDbContext context)
+        {
+            return context.Modules.ToListAsync();
+        }
+        */
 
         public IActionResult About()
         {
