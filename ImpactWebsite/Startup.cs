@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using ImpactWebsite.Data;
 using ImpactWebsite.Models;
 using ImpactWebsite.Services;
+using Stripe;
 
 namespace ImpactWebsite
 {
@@ -52,6 +49,8 @@ namespace ImpactWebsite
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,7 +83,10 @@ namespace ImpactWebsite
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
+
             ModuleSeedData.InitializeModuleSeedAsync(context).Wait();
+            RoleSeedData.Initialize(app.ApplicationServices);
         }
     }
 }
