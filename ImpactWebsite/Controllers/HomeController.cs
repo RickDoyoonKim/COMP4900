@@ -3,34 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ImpactWebsite.Data;
-using ImpactWebsite.Models;
 
 namespace ImpactWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext _context;
-
-        public HomeController(ApplicationDbContext context)
+        public IActionResult Index()
         {
-            _context = context;
+            return View();
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var modules = _context.Modules.ToList();
-
-            return View(modules);
-        }
-
-        /*
-        private Task<List<Module>> GetModules(ApplicationDbContext context)
-        {
-            return context.Modules.ToListAsync();
-        }
-        */
 
         public IActionResult About()
         {

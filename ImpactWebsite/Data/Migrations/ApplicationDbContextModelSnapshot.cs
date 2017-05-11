@@ -109,31 +109,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.ToTable("Investment");
                 });
 
-            modelBuilder.Entity("ImpactWebsite.Models.Module", b =>
-                {
-                    b.Property<long>("ModuleId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("DeliveryDays");
-
-                    b.Property<string>("Description");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("ModuleName")
-                        .IsRequired()
-                        .HasMaxLength(160);
-
-                    b.Property<string>("ModuleUrl")
-                        .HasMaxLength(1024);
-
-                    b.Property<long>("UnitPriceId");
-
-                    b.HasKey("ModuleId");
-
-                    b.ToTable("Module");
-                });
-
             modelBuilder.Entity("ImpactWebsite.Models.NewsLetterUser", b =>
                 {
                     b.Property<long>("NewsLetterUserId")
@@ -202,6 +177,44 @@ namespace ImpactWebsite.Data.Migrations
                     b.ToTable("OrderLine");
                 });
 
+            modelBuilder.Entity("ImpactWebsite.Models.OrderModels.OrderModule", b =>
+                {
+                    b.Property<int>("ModuleId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DeliveryDays");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("LongDescription");
+
+                    b.Property<string>("ModuleName");
+
+                    b.Property<int>("UnitPriceId");
+
+                    b.HasKey("ModuleId");
+
+                    b.HasIndex("UnitPriceId");
+
+                    b.ToTable("OrderModule");
+                });
+
+            modelBuilder.Entity("ImpactWebsite.Models.OrderModels.UnitPrice", b =>
+                {
+                    b.Property<int>("UnitPriceId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateEffectFrom");
+
+                    b.Property<DateTime>("DateEffectTo");
+
+                    b.Property<int>("Price");
+
+                    b.HasKey("UnitPriceId");
+
+                    b.ToTable("UnitPrice");
+                });
+
             modelBuilder.Entity("ImpactWebsite.Models.Promotion", b =>
                 {
                     b.Property<long>("PromotionId")
@@ -224,24 +237,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.HasKey("PromotionId");
 
                     b.ToTable("Promotion");
-                });
-
-            modelBuilder.Entity("ImpactWebsite.Models.UnitPrice", b =>
-                {
-                    b.Property<long>("UnitPriceId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateEffectFrom");
-
-                    b.Property<DateTime>("DateEffectTo");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<decimal>("UnitPriceValue");
-
-                    b.HasKey("UnitPriceId");
-
-                    b.ToTable("UnitPrice");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -363,6 +358,14 @@ namespace ImpactWebsite.Data.Migrations
                     b.HasOne("ImpactWebsite.Models.ApplicationUser")
                         .WithMany("Orders")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("ImpactWebsite.Models.OrderModels.OrderModule", b =>
+                {
+                    b.HasOne("ImpactWebsite.Models.OrderModels.UnitPrice", "UnitPrice")
+                        .WithMany()
+                        .HasForeignKey("UnitPriceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

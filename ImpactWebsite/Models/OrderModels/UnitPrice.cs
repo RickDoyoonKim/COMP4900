@@ -4,17 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImpactWebsite.Models
+namespace ImpactWebsite.Models.OrderModels
 {
-    public class UnitPrice : BaseEntity
+    public class UnitPrice
     {
         [Key]
-        public Int64 UnitPriceId { get; set; }
-
-        [Required]
-        [Range(0.0, double.MaxValue)]
-        public Decimal UnitPriceValue { get; set; }
-
+        public int UnitPriceId { get; set; }
+        [DataType(DataType.Currency)]
+        public int Price { get; set; }
         public DateTime DateEffectFrom { get; set; }
         public DateTime DateEffectTo { get; set; }
     }
