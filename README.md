@@ -26,13 +26,13 @@ Website:
 
 ### Database
 
-- MS SQL Server
+- MS SQL Server 2012, 2014
 
 
 
 ### Scrum (Agile Methodology)
 
-- 1 Weeks Iteration 
+- 1 Week Iteration 
 
 
 
