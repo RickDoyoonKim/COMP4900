@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ImpactWebsite.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class MIgiration_0 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,24 +40,6 @@ namespace ImpactWebsite.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Module",
-                columns: table => new
-                {
-                    ModuleId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DeliveryDays = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    ModifiedDate = table.Column<DateTime>(nullable: false),
-                    ModuleName = table.Column<string>(maxLength: 160, nullable: false),
-                    ModuleUrl = table.Column<string>(maxLength: 1024, nullable: true),
-                    UnitPriceId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Module", x => x.ModuleId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "NewsLetterUser",
                 columns: table => new
                 {
@@ -88,6 +70,21 @@ namespace ImpactWebsite.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UnitPrice",
+                columns: table => new
+                {
+                    UnitPriceId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DateEffectFrom = table.Column<DateTime>(nullable: false),
+                    DateEffectTo = table.Column<DateTime>(nullable: false),
+                    Price = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnitPrice", x => x.UnitPriceId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Promotion",
                 columns: table => new
                 {
@@ -103,22 +100,6 @@ namespace ImpactWebsite.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Promotion", x => x.PromotionId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UnitPrice",
-                columns: table => new
-                {
-                    UnitPriceId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DateEffectFrom = table.Column<DateTime>(nullable: false),
-                    DateEffectTo = table.Column<DateTime>(nullable: false),
-                    ModifiedDate = table.Column<DateTime>(nullable: false),
-                    UnitPriceValue = table.Column<decimal>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UnitPrice", x => x.UnitPriceId);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,6 +201,29 @@ namespace ImpactWebsite.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderModule",
+                columns: table => new
+                {
+                    ModuleId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DeliveryDays = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    LongDescription = table.Column<string>(nullable: true),
+                    ModuleName = table.Column<string>(nullable: true),
+                    UnitPriceId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderModule", x => x.ModuleId);
+                    table.ForeignKey(
+                        name: "FK_OrderModule_UnitPrice_UnitPriceId",
+                        column: x => x.UnitPriceId,
+                        principalTable: "UnitPrice",
+                        principalColumn: "UnitPriceId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IdentityRoleClaim<string>",
                 columns: table => new
                 {
@@ -310,6 +314,11 @@ namespace ImpactWebsite.Data.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderModule_UnitPriceId",
+                table: "OrderModule",
+                column: "UnitPriceId");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "IdentityRole",
                 column: "NormalizedName",
@@ -342,19 +351,16 @@ namespace ImpactWebsite.Data.Migrations
                 name: "Investment");
 
             migrationBuilder.DropTable(
-                name: "Module");
-
-            migrationBuilder.DropTable(
                 name: "NewsLetterUser");
 
             migrationBuilder.DropTable(
                 name: "OrderLine");
 
             migrationBuilder.DropTable(
-                name: "Promotion");
+                name: "OrderModule");
 
             migrationBuilder.DropTable(
-                name: "UnitPrice");
+                name: "Promotion");
 
             migrationBuilder.DropTable(
                 name: "IdentityRoleClaim<string>");
@@ -373,6 +379,9 @@ namespace ImpactWebsite.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderHeader");
+
+            migrationBuilder.DropTable(
+                name: "UnitPrice");
 
             migrationBuilder.DropTable(
                 name: "IdentityRole");

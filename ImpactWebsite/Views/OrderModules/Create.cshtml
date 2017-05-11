@@ -1,29 +1,21 @@
-@model ImpactWebsite.Models.Module
+@model ImpactWebsite.Models.OrderModels.OrderModule
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
-<h2>Edit</h2>
+<h2>Create</h2>
 
-<form asp-action="Edit">
+<form asp-action="Create">
     <div class="form-horizontal">
-        <h4>Module</h4>
+        <h4>OrderModule</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="ModuleId" />
         <div class="form-group">
             <label asp-for="ModuleName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="ModuleName" class="form-control" />
                 <span asp-validation-for="ModuleName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ModuleUrl" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ModuleUrl" class="form-control" />
-                <span asp-validation-for="ModuleUrl" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -41,22 +33,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="UnitPriceId" class="col-md-2 control-label"></label>
+            <label asp-for="LongDescription" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="UnitPriceId" class="form-control" />
-                <span asp-validation-for="UnitPriceId" class="text-danger"></span>
+                <input asp-for="LongDescription" class="form-control" />
+                <span asp-validation-for="LongDescription" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="ModifiedDate" class="col-md-2 control-label"></label>
+            <label asp-for="UnitPriceId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                <select asp-for="UnitPriceId" class ="form-control" asp-items="ViewBag.UnitPriceId"></select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -66,3 +57,6 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

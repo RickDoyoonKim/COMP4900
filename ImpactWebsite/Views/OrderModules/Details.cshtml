@@ -1,18 +1,13 @@
-@model ImpactWebsite.Models.Module
+@model ImpactWebsite.Models.OrderModels.OrderModule
 
 @{
-    ViewData["Title"] = "Module Details";
+    ViewData["Title"] = "Details";
 }
 
-<h2>Module Details</h2>
-
-<p>
-    <img alt="@Model.ModuleName" src="@Url.Content(@Model.ModuleUrl)" />
-</p>
-
+<h2>Details</h2>
 
 <div>
-    <h4>Module</h4>
+    <h4>OrderModule</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,12 +15,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ModuleName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ModuleUrl)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ModuleUrl)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DeliveryDays)
@@ -40,21 +29,20 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.UnitPriceId)
+            @Html.DisplayNameFor(model => model.LongDescription)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UnitPriceId)
+            @Html.DisplayFor(model => model.LongDescription)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
+            @Html.DisplayNameFor(model => model.UnitPrice)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
+            @Html.DisplayFor(model => model.UnitPrice.UnitPriceId)
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ModuleId">Edit</a> |
     <a asp-action="Index">Back to List</a>
-    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.ModuleId">Add to cart</a>
 </div>

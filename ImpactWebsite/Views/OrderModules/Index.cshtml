@@ -1,4 +1,4 @@
-@model IEnumerable<ImpactWebsite.Models.Module>
+@model IEnumerable<ImpactWebsite.Models.OrderModels.OrderModule>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,20 +16,17 @@
                     @Html.DisplayNameFor(model => model.ModuleName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ModuleUrl)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.DeliveryDays)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UnitPriceId)
+                    @Html.DisplayNameFor(model => model.LongDescription)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ModifiedDate)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -40,19 +37,16 @@
                 @Html.DisplayFor(modelItem => item.ModuleName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ModuleUrl)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DeliveryDays)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UnitPriceId)
+                @Html.DisplayFor(modelItem => item.LongDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ModifiedDate)
+                @Html.DisplayFor(modelItem => item.UnitPrice.UnitPriceId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ModuleId">Edit</a> |

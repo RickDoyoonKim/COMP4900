@@ -1,0 +1,88 @@
+@model IEnumerable<ImpactWebsite.Models.OrderModels.OrderModule>
+
+    @{
+        ViewData["Title"] = "Index";
+    }
+
+    <h2>Select Modules</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Select
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModuleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DeliveryDays)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitPrice)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+{
+                <tr>
+                    <td>
+                        <input type="checkbox" name="moduleId" class="chkBox" value='@Html.Raw(Json.Serialize(item))' />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitPrice.Price)
+                    </td>
+                </tr>
+}
+            <tr>
+                <td></td>
+                <td>Total: </td>
+                <td><input name="totalDay" value="0" readonly="readonly" disabled="disabled" /></td>
+                <td><input name="totalPrice" value="0" readonly="readonly" disabled="disabled" /></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a data-toggle="modal"
+       class="btn btn-info">
+        <i class="glyphicon glyphicon-arrow-right"></i>  Next
+    </a>
+    <a data-toggle="modal" class="btn btn-info">
+        <i class="glyphicon glyphicon-trash"></i>  Cancel
+    </a>
+
+    @section scripts
+{
+        <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+
+        <script type="text/javascript">
+    $(document).ready(function () {
+        //calculateTotal();
+        $("input[type='checkbox']").click(function () {
+            calculateTotal();
+        });
+    });
+    function calculateTotal() {
+        totalPrice = 0.0;
+        totalDays = 0;
+        $(':checkbox:checked.chkBox').each(function () {
+
+            var jsonObj = JSON.parse($(this).val());
+            //alert(jsonObj.moduleName);
+            console.log($(this).val());
+            totalPrice += +jsonObj.unitPrice.price;
+            totalDays += +jsonObj.deliveryDays;
+        });
+        $('input[name=totalDay]').val(totalDays);
+        $('input[name=totalPrice]').val(totalPrice.toFixed(2));
+        //$('#total').text(total.toFixed(2));
+    }
+        </script>
+    }

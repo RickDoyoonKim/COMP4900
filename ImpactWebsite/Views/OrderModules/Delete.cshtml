@@ -1,4 +1,4 @@
-@model ImpactWebsite.Models.Module
+@model ImpactWebsite.Models.OrderModels.OrderModule
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Module</h4>
+    <h4>OrderModule</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="ModuleId" />
@@ -17,12 +17,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ModuleName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ModuleUrl)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ModuleUrl)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DeliveryDays)
@@ -37,16 +31,16 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.UnitPriceId)
+            @Html.DisplayNameFor(model => model.LongDescription)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UnitPriceId)
+            @Html.DisplayFor(model => model.LongDescription)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
+            @Html.DisplayNameFor(model => model.UnitPrice)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
+            @Html.DisplayFor(model => model.UnitPrice.UnitPriceId)
         </dd>
     </dl>
     

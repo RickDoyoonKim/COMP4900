@@ -9,6 +9,7 @@ using ImpactWebsite.Data;
 using ImpactWebsite.Models;
 using ImpactWebsite.Services;
 using Stripe;
+using ImpactWebsite.Models.SampleSeedData;
 
 namespace ImpactWebsite
 {
@@ -85,7 +86,7 @@ namespace ImpactWebsite
 
             StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
-            ModuleSeedData.InitializeModuleSeedAsync(context).Wait();
+            ModuleSeedData.Initialize(context);
             RoleSeedData.Initialize(app.ApplicationServices);
         }
     }
