@@ -45,7 +45,6 @@ namespace ImpactWebsite.Models
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
-                ModifiedDate = DateTime.Now,
                 CompanyName = "Fairbank Financial",
                 NewsletterRequired = true
             };
@@ -62,7 +61,6 @@ namespace ImpactWebsite.Models
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
-                ModifiedDate = DateTime.Now,
                 CompanyName = "Retailed Investor",
                 NewsletterRequired = true
             };

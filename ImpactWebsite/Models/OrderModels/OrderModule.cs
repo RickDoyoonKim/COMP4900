@@ -17,5 +17,6 @@ namespace ImpactWebsite.Models.OrderModels
         public UnitPrice UnitPrice { get; set; }
         [Display(Name = "Unit Price")]
         public int UnitPriceId { get; set; }
+        public List<OrderLine> OrderLines { get; set; }
     }
 }

@@ -36,8 +36,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Views\Charge\" />
-    <Folder Include="Views\Order\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

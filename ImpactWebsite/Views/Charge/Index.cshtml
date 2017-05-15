@@ -10,7 +10,7 @@
 
 <form action="/Charge/Charge" method="POST">
     <article>
-        <label>Amount: $5.00</label>
+        <label>Amount: $@ViewData["amount"]</label>
     </article>
     <script src="//checkout.stripe.com/v2/checkout.js"
             class="stripe-button"
