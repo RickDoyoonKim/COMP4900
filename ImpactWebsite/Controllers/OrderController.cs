@@ -163,6 +163,14 @@ namespace ImpactWebsite.Controllers
 
             return PartialView("_Register", model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PartialModuleDetail(string id)
+        {
+            var DetailModules = _context.Modules.FirstOrDefault(m => m.ModuleId == Convert.ToInt32(id));
+            return PartialView("_PartialModuleDetail", DetailModules);
+        }
         //
         // GET: /Account/_Register
         [HttpGet]

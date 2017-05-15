@@ -54,7 +54,9 @@
                     </td>
                     <td> 
                         <label asp-for="@Model.ElementAt(@i).IsChecked" >
-                            @Model.ElementAt(@i).Modules.ModuleName
+                            @Model.ElementAt(@i).Modules.ModuleName 
+                            <a class="Detail" value="@Model.ElementAt(@i).Modules.ModuleId"
+                               name="@Model.ElementAt(@i).Modules.ModuleName">Detail</a>
                         </label>
                     </td>
                     <td>
@@ -74,7 +76,6 @@
                 <td>Total: </td>
                 <td><input type="text" name="totalDay" value="3" readonly="readonly" /></td>
                 <td><input type="text" name="totalPrice" value="0" readonly="readonly"  /></td>
-                @*<td><input type="text" name="totalPrice" value="0" /></td>*@
             </tr>
         </tbody>
     </table>
@@ -85,28 +86,59 @@
     </div>
 </form>
  
+<div id="AddUserForm"></div>
+
 @section scripts
 {
         <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" />
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("input[type='checkbox']").click(function () {
-                    calculateTotal();
-                });
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input[type='checkbox']").click(function () {
+                calculateTotal();
             });
-            function calculateTotal() {
-                totalPrice = 0.0;
-                totalDays = 3;
-                $(':checkbox:checked.chkBox').each(function () {
+        });
+         function calculateTotal() {
+            totalPrice = 0.0;
+            totalDays = 3;
+            $(':checkbox:checked.chkBox').each(function () {
 
-                    var jsonObj = JSON.parse($(this).val());
-                    console.log($(this).val());
-                    totalPrice += +jsonObj.modules.unitPrice.price;
-                    totalDays += +jsonObj.modules.deliveryDays;
-                });
-                $('input[name=totalDay]').val(totalDays);
-                $('input[name=totalPrice]').val(totalPrice.toFixed(2));
-            }
-        </script>
+                var jsonObj = JSON.parse($(this).val());
+                console.log($(this).val());
+                totalPrice += +jsonObj.modules.unitPrice.price;
+                totalDays += +jsonObj.modules.deliveryDays;
+            });
+            $('input[name=totalDay]').val(totalDays);
+            $('input[name=totalPrice]').val(totalPrice.toFixed(2));
+        }
+    </script>
+
+    <script type="text/javascript">
+         var idNum;
+         $('.Detail').on('click', function () {
+
+             var idNum = $(this).attr('value');
+             var link = '@Url.Action("PartialModuleDetail", "Order", new { id = "-1" })';
+             var strTitle = $(this).attr('name');
+
+             link = link.replace("-1", idNum);
+
+             $("#AddUserForm").dialog({
+             type: 'GET',
+             autoOpen: true,
+             position: { my: "top", at: "top+150", of: window },
+             width: 600,
+             height: 200,
+             resizable: false,
+             title: strTitle,
+             modal: true,
+             open: function () {
+                 $(this).load(link);
+             },
+             });
+             return false;
+         });
+</script>
     }
