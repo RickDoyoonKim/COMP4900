@@ -1,10 +1,27 @@
-@model IEnumerable<ImpactWebsite.Models.OrderModels.OrderModule>
+@model IEnumerable<ImpactWebsite.Models.OrderModels.OrderList>
+
+@using Microsoft.AspNetCore.Identity
+@using ImpactWebsite.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
     @{
         ViewData["Title"] = "Index";
     }
 
     <h2>Select Modules</h2>
+
+<form action="/Order/NewOrder" method="post">
+    <label style="color: brown;">*Email Address: </label>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <input type="email" required="required" name="email" value="@ViewData["email"]" />
+    }
+    else
+    {
+        <input type="email" required="required" name="email" value="" />
+    }
 
     <table class="table">
         <thead>
@@ -13,76 +30,115 @@
                     Select
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ModuleName)
+                    @Html.DisplayNameFor(model => model.Modules.ModuleName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DeliveryDays)
+                    @Html.DisplayNameFor(model => model.Modules.DeliveryDays)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UnitPrice)
+                    @Html.DisplayNameFor(model => model.Modules.UnitPrice)
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-{
+            @for (int i = 0; i < Model.Count(); i++)
+            {
                 <tr>
                     <td>
-                        <input type="checkbox" name="moduleId" class="chkBox" value='@Html.Raw(Json.Serialize(item))' />
+                        @if (@i == 0)
+                        {
+                            <input type="checkbox" checked="checked" disabled="disabled" name="modules" value='@Html.Raw(Json.Serialize(Model.ElementAt(@i)))' />
+                        } else { 
+                            <input type="checkbox" name="modules" class="chkBox" value='@Html.Raw(Json.Serialize(Model.ElementAt(@i)))' />
+                        }
+                    </td>
+                    <td> 
+                        <label asp-for="@Model.ElementAt(@i).IsChecked" >
+                            @Model.ElementAt(@i).Modules.ModuleName 
+                            <a class="Detail" value="@Model.ElementAt(@i).Modules.ModuleId"
+                               name="@Model.ElementAt(@i).Modules.ModuleName">Detail</a>
+                        </label>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ModuleName)
+                        <label asp-for="@Model.ElementAt(@i).IsChecked">
+                            @Model.ElementAt(@i).Modules.DeliveryDays
+                        </label>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DeliveryDays)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UnitPrice.Price)
+                        <label asp-for="@Model.ElementAt(@i).IsChecked">
+                            @Model.ElementAt(@i).Modules.UnitPrice.Price
+                        </label>
                     </td>
                 </tr>
-}
+            }
             <tr>
                 <td></td>
                 <td>Total: </td>
-                <td><input name="totalDay" value="0" readonly="readonly" disabled="disabled" /></td>
-                <td><input name="totalPrice" value="0" readonly="readonly" disabled="disabled" /></td>
+                <td><input type="text" name="totalDay" value="3" readonly="readonly" /></td>
+                <td><input type="text" name="totalPrice" value="0" readonly="readonly"  /></td>
             </tr>
         </tbody>
     </table>
+    <div class="form-group">
+        <div>
+            <input type="submit" class="btn btn-primary" value="Next >>"  />
+        </div>
+    </div>
+</form>
+ 
+<div id="AddUserForm"></div>
 
-    <a data-toggle="modal"
-       class="btn btn-info">
-        <i class="glyphicon glyphicon-arrow-right"></i>  Next
-    </a>
-    <a data-toggle="modal" class="btn btn-info">
-        <i class="glyphicon glyphicon-trash"></i>  Cancel
-    </a>
-
-    @section scripts
+@section scripts
 {
         <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" />
 
-        <script type="text/javascript">
-    $(document).ready(function () {
-        //calculateTotal();
-        $("input[type='checkbox']").click(function () {
-            calculateTotal();
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input[type='checkbox']").click(function () {
+                calculateTotal();
+            });
         });
-    });
-    function calculateTotal() {
-        totalPrice = 0.0;
-        totalDays = 0;
-        $(':checkbox:checked.chkBox').each(function () {
+         function calculateTotal() {
+            totalPrice = 0.0;
+            totalDays = 3;
+            $(':checkbox:checked.chkBox').each(function () {
 
-            var jsonObj = JSON.parse($(this).val());
-            //alert(jsonObj.moduleName);
-            console.log($(this).val());
-            totalPrice += +jsonObj.unitPrice.price;
-            totalDays += +jsonObj.deliveryDays;
-        });
-        $('input[name=totalDay]').val(totalDays);
-        $('input[name=totalPrice]').val(totalPrice.toFixed(2));
-        //$('#total').text(total.toFixed(2));
-    }
-        </script>
+                var jsonObj = JSON.parse($(this).val());
+                console.log($(this).val());
+                totalPrice += +jsonObj.modules.unitPrice.price;
+                totalDays += +jsonObj.modules.deliveryDays;
+            });
+            $('input[name=totalDay]').val(totalDays);
+            $('input[name=totalPrice]').val(totalPrice.toFixed(2));
+        }
+    </script>
+
+    <script type="text/javascript">
+         var idNum;
+         $('.Detail').on('click', function () {
+
+             var idNum = $(this).attr('value');
+             var link = '@Url.Action("PartialModuleDetail", "Order", new { id = "-1" })';
+             var strTitle = $(this).attr('name');
+
+             link = link.replace("-1", idNum);
+
+             $("#AddUserForm").dialog({
+             type: 'GET',
+             autoOpen: true,
+             position: { my: "top", at: "top+150", of: window },
+             width: 600,
+             height: 200,
+             resizable: false,
+             title: strTitle,
+             modal: true,
+             open: function () {
+                 $(this).load(link);
+             },
+             });
+             return false;
+         });
+</script>
     }

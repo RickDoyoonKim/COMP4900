@@ -9,8 +9,9 @@ namespace ImpactWebsite.Controllers
 {
     public class ChargeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
+            ViewData["amount"] = id;
             return View();
         }
 

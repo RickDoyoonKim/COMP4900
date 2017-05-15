@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using ImpactWebsite.Models.OrderModels;
 
 namespace ImpactWebsite.Models
 {
@@ -24,9 +25,7 @@ namespace ImpactWebsite.Models
         public string CompanyName { get; set; }
 
         public bool NewsletterRequired { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
-
+        
         public List<OrderHeader> Orders { get; set; }
     }
 }
