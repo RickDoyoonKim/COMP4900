@@ -1,0 +1,31 @@
+@using Microsoft.Extensions.Options
+@using ImpactWebsite.Models.BillingModels
+@inject IOptions<StripeSettings> Stripe
+
+@{
+    ViewData["Title"] = "Billing";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h2>Billing</h2>
+<br />
+@Html.Partial("_PaymentDetails", (CreditCard)ViewBag.PaymentDetails)
+<br />
+@Html.Partial("_BillingAddress", (BillingAddress)ViewBag.BillingAddress)
+<br />
+
+
+
+<h3>Sample Stripe Pay</h3>
+<form action="/Billing/Charge" method="POST">
+    <article>
+        <label>Amount: $5.00</label>
+    </article>
+    <script src="//checkout.stripe.com/v2/checkout.js"
+            class="stripe-button"
+            data-key="@Stripe.Value.PublishableKey"
+            data-locale="auto"
+            data-description="Sample Charge"
+            data-amount="10">
+    </script>
+</form>

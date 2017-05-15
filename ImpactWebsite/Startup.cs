@@ -6,10 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ImpactWebsite.Data;
-using ImpactWebsite.Models;
+using ImpactWebsite.Models.BillingModels;
 using ImpactWebsite.Services;
 using Stripe;
 using ImpactWebsite.Models.SampleSeedData;
+using ImpactWebsite.Models;
 
 namespace ImpactWebsite
 {

@@ -1,0 +1,25 @@
+
+@model ImpactWebsite.Models.BillingModels.BillingAddress
+
+<h3>Billing Address</h3>
+<hr />
+@if (Model != null &&
+                !string.IsNullOrEmpty(Model.Name) &&
+                !string.IsNullOrEmpty(Model.AddressLine1) &&
+                !string.IsNullOrEmpty(Model.ZipCode) &&
+                !string.IsNullOrEmpty(Model.City) &&
+                !string.IsNullOrEmpty(Model.Country))
+{
+    <p>
+        @Model.Name<br />
+        @Model.AddressLine1 @Model.AddressLine2<br />
+        @Model.ZipCode @Model.City<br />
+        @Model.State @Model.Country
+    </p>
+    <p><a href="@Url.Action("BillingAddress")">Edit billing address</a></p>
+}
+else
+{
+    <p><a href="@Url.Action("BillingAddress")" class="btn btn-primary">Add your billing address</a></p>
+}
+

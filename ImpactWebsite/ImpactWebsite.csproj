@@ -40,7 +40,6 @@
     <Folder Include="Data\Migrations\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Views\Charge\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
