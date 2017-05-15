@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ImpactWebsite.Data;
-using ImpactWebsite.Models;
+using ImpactWebsite.Models.BillingModels;
 using ImpactWebsite.Services;
+using Stripe;
+using ImpactWebsite.Models.SampleSeedData;
+using ImpactWebsite.Models;
 
 namespace ImpactWebsite
 {
@@ -52,10 +51,12 @@ namespace ImpactWebsite
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -84,8 +85,10 @@ namespace ImpactWebsite
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            ModuleSeedData.Initialize(db);
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
+            ModuleSeedData.Initialize(context);
+            RoleSeedData.Initialize(app.ApplicationServices);
         }
     }
 }

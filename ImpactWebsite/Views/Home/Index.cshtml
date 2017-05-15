@@ -1,21 +1,30 @@
-﻿@model IEnumerable<Module>
-
-@{
-    ViewBag.Title = "Home Page";
+﻿@{
+    ViewData["Title"] = "Home Page";
 }
-<div class="jumbotron">
-    <h1>Impact Website</h1>
-    <img src="~/Images/background_1.jpg" width="50%" height="50%" />
+<div class="btnAnalysis">
+    <a class="btn btn-primary btn-lg" id="Test" asp-controller="Order" asp-action="Index">
+        Start Analysis
+    </a>
+    
+    <div style="font-size: 0.3em; text-align: left; margin-left: 35%; margin-top: 20%;">
+
+        <table border="1">
+            <tr>
+                <th colspan="2" style="text-align:center;">Request News Letter?</th>
+            </tr>
+            <tr>
+                <td>Email Address</td>
+                <td><input /></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td><input /></td>
+            </tr>
+            <tr>
+                <td>Compnay Name</td>
+                <td><input /></td>
+            </tr>
+        </table>
+    </div>
 </div>
-<ul class="row list-unstyled" id="album-list">
-    @foreach (var module in Model)
-    {
-        <li class="col-lg-4 col-md-4 container">
-            <a asp-controller="Module" asp-action="Details" asp-route-id="@module.ModuleId">
-                <img alt="@module.ModuleName" src="@Url.Content(@module.ModuleUrl)" width="50%" height="50%" />
-                <h4>@module.ModuleName</h4>
-                <p>@module.Description</p>
-            </a>
-        </li>
-    }
-</ul>
+
