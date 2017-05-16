@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ImpactWebsite.Data.Migrations
 {
-    public partial class Migration_0 : Migration
+    public partial class week4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -146,6 +146,7 @@ namespace ImpactWebsite.Data.Migrations
                     OrderStatus = table.Column<int>(nullable: false),
                     OrderedDate = table.Column<DateTime>(nullable: false),
                     SalesRep = table.Column<string>(maxLength: 160, nullable: true),
+                    TotalAmount = table.Column<int>(nullable: false),
                     UserEmail = table.Column<string>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
