@@ -13,16 +13,22 @@
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="OrderLineId" />
         <dt>
+            @Html.DisplayNameFor(model => model.ModuleName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ModuleName)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.ModifiedDate)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ModifiedDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Modules)
+            @Html.DisplayNameFor(model => model.Module)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Modules.ModuleId)
+            @Html.DisplayFor(model => model.Module.ModuleId)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.OrderHeader)

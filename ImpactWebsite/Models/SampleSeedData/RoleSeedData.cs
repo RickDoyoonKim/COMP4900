@@ -51,12 +51,12 @@ namespace ImpactWebsite.Models
 
             var member = new ApplicationUser
             {
-                FirstName = "test",
-                LastName = "user",
-                Email = "test@test.com",
-                NormalizedEmail = "TEST@TEST.COM",
-                UserName = "test@test.com",
-                NormalizedUserName = "TEST@TEST.COM",
+                FirstName = "temp",
+                LastName = "temp",
+                Email = "temp@user.com",
+                NormalizedEmail = "TEMP@USER.COM",
+                UserName = "temp@user.com",
+                NormalizedUserName = "TEMP@USER.COM",
                 PhoneNumber = "000-000-0000",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,

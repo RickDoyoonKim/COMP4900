@@ -22,7 +22,7 @@ namespace ImpactWebsite.Controllers
         // GET: OrderLines
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.OrderLines.Include(o => o.Module.ModuleId).Include(o => o.OrderHeader);
+            var applicationDbContext = _context.OrderLines.Include(o => o.Module).Include(o => o.OrderHeader);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -59,7 +59,7 @@ namespace ImpactWebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderLineId,OrderHeaderId,ModuleId,ModifiedDate")] OrderLine orderLine)
+        public async Task<IActionResult> Create([Bind("OrderLineId,OrderHeaderId,ModuleId,ModuleName,ModifiedDate")] OrderLine orderLine)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace ImpactWebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderLineId,OrderHeaderId,ModuleId,ModifiedDate")] OrderLine orderLine)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderLineId,OrderHeaderId,ModuleId,ModuleName,ModifiedDate")] OrderLine orderLine)
         {
             if (id != orderLine.OrderLineId)
             {
@@ -136,7 +136,7 @@ namespace ImpactWebsite.Controllers
             }
 
             var orderLine = await _context.OrderLines
-                .Include(o => o.Module.ModuleId)
+                .Include(o => o.Module)
                 .Include(o => o.OrderHeader)
                 .SingleOrDefaultAsync(m => m.OrderLineId == id);
             if (orderLine == null)
