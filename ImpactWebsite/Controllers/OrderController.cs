@@ -109,7 +109,7 @@ namespace ImpactWebsite.Controllers
             else
             {
                 var findUser = await _UserManager.FindByEmailAsync(email);
-                var notRegisteredUser = await _UserManager.FindByEmailAsync("test@test.com");
+                var notRegisteredUser = await _UserManager.FindByEmailAsync("temp@user.com");
                 if (findUser != null)
                 {
                     TempUser = findUser;

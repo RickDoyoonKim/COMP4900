@@ -29,6 +29,7 @@ namespace ImpactWebsite.Data
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderLine> OrderLines { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<ImpactWebsite.Models.ApplicationUser> ApplicationUser { get; set; }
 
     }
 }

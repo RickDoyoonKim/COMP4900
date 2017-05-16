@@ -54,7 +54,7 @@ namespace ImpactWebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderHeaderId,OrderNum,SalesRep,OrderedDate,DeliveredDate,OrderStatus,NoteFromUser,NoteFromAdmin,UserEmail,UserId,OrderLineId")] OrderHeader orderHeader)
+        public async Task<IActionResult> Create([Bind("OrderHeaderId,OrderNum,SalesRep,OrderedDate,DeliveredDate,OrderStatus,NoteFromUser,NoteFromAdmin,UserEmail,UserId,TotalAmount")] OrderHeader orderHeader)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace ImpactWebsite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderHeaderId,OrderNum,SalesRep,OrderedDate,DeliveredDate,OrderStatus,NoteFromUser,NoteFromAdmin,UserEmail,UserId,OrderLineId")] OrderHeader orderHeader)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderHeaderId,OrderNum,SalesRep,OrderedDate,DeliveredDate,OrderStatus,NoteFromUser,NoteFromAdmin,UserEmail,UserId,TotalAmount")] OrderHeader orderHeader)
         {
             if (id != orderHeader.OrderHeaderId)
             {

@@ -7,23 +7,23 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderHeader.UserEmail)
+                @Html.DisplayNameFor(model => model.OrderHeader)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderHeader.OrderNum)
+                @Html.DisplayNameFor(model => model.Module)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Modules.ModuleName)
+                @Html.DisplayNameFor(model => model.ModuleName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ModifiedDate)
             </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -34,10 +34,10 @@
                 @Html.DisplayFor(modelItem => item.OrderHeader.UserEmail)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderHeader.OrderNum)
+                @Html.DisplayFor(modelItem => item.Module.ModuleId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Modules.ModuleName)
+                @Html.DisplayFor(modelItem => item.ModuleName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ModifiedDate)
