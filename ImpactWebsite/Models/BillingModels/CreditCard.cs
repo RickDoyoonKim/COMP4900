@@ -66,8 +66,6 @@ namespace ImpactWebsite.Models.BillingModels
         [Required(ErrorMessageResourceName = "CreditCard_Name_Please_enter_the_name_on_the_card_")]
         public string Name { get; set; }
 
-        public string SaasEcomUserId { get; set; }
-
         public string StripeId { get; set; }
 
         [NotMapped]

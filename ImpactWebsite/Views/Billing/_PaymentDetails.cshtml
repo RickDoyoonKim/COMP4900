@@ -1,26 +1,60 @@
-@model ImpactWebsite.Models.BillingModels.CreditCard
-
+@using ImpactWebsite.Models.BillingModels
+@model IEnumerable<ImpactWebsite.Models.BillingModels.BillingDetailViewModel>
 @{
     ViewData["Title"] = "PaymentDetails";
 }
 
-<h3>Payment Details</h3>
-<hr />
+<h3>Selected Modules</h3>
+<br />
 @if (Model != null)
 {
     const string strSpacer = "&nbsp;&nbsp;";
 
-    <p>
-        @if (Model.Type != "Unknown")
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeaderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
         {
-            <img src="/Content/card-icons/@(Model.Type).png" style="max-width: 45px;" /> @Html.Raw(strSpacer)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderHeaderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleName)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+            </tr>
         }
-        **** **** **** @Model.Last4 @Html.Raw(strSpacer)
-        Expires @Model.ExpirationMonth/@Model.ExpirationYear @Html.Raw(strSpacer) @Html.Raw(strSpacer)
-        <a href="@Url.Action("ChangeCreditCard", new { id = Model.Id })">Change Credit Card</a>
-    </p>
+    </table>
 }
 else
 {
-    <p>You haven't entered your payment details yet. @Html.ActionLink("Add your Payment Details now.", "AddCreditCard")</p>
+    <p>You haven't selected module(s) yet. </p>
+    <a class="btn btn-primary" id="Test" asp-controller="Order" asp-action="Index">
+        Start Analysis
+    </a>
 }

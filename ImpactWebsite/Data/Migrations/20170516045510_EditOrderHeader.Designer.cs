@@ -9,9 +9,10 @@ using ImpactWebsite.Models.OrderModels;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170516045510_EditOrderHeader")]
+    partial class EditOrderHeader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -38,8 +39,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(160);
-
-                    b.Property<bool>("IsTempUser");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -135,6 +134,8 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<string>("NoteFromUser");
 
+                    b.Property<int>("OrderLineId");
+
                     b.Property<int>("OrderNum");
 
                     b.Property<int>("OrderStatus");
@@ -166,8 +167,6 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<DateTime>("ModifiedDate");
 
                     b.Property<int>("ModuleId");
-
-                    b.Property<string>("ModuleName");
 
                     b.Property<int>("OrderHeaderId");
 
@@ -357,7 +356,7 @@ namespace ImpactWebsite.Data.Migrations
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderModels.OrderLine", b =>
                 {
-                    b.HasOne("ImpactWebsite.Models.OrderModels.OrderModule", "Module")
+                    b.HasOne("ImpactWebsite.Models.OrderModels.OrderModule", "Modules")
                         .WithMany("OrderLines")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -85,8 +85,8 @@ namespace ImpactWebsite.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> NewOrder(IFormCollection collection, string email, string totalPrice, string totalDay)
+        public async Task<IActionResult> NewOrder(IFormCollection collection, string email, string totalPrice, string totalPriceInt, string totalDay)
+
         {
             int NewOrderNumber = 1;
 
@@ -97,6 +97,9 @@ namespace ImpactWebsite.Controllers
             ViewData["DeliverDate"] = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)).ToString("MMM dd yyyy");
             ViewData["TotalDay"] = totalDay;
             ViewData["TotalAmount"] = totalPrice;
+            ViewData["LoggedinUserId"] = user.Id;
+
+            int totalAmount = Int32.Parse(totalPriceInt);
 
             if (_SignInManager.IsSignedIn(User))
             {
@@ -128,6 +131,7 @@ namespace ImpactWebsite.Controllers
                     DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = NewOrderNumber,
                     UserId = TempUser.Id
+                    TotalAmount = totalAmount
                 });
             }
             else
@@ -140,10 +144,25 @@ namespace ImpactWebsite.Controllers
                     DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = NewOrderNumber,
                     UserId = TempUser.Id
+                    TotalAmount = totalAmount
                 });
             }
 
             await _context.SaveChangesAsync();
+
+            try
+            {
+                var newOrderHeader = _context.OrderHeaders.SingleOrDefault(x => x.OrderNum == NewOrderNumber);
+                ViewData["OrderId"] = newOrderHeader.OrderHeaderId;
+                if(ViewData["OrderId"] == null)
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("ArgumentNullException source: {0}", e.Source);
+            }
 
             var lists = collection["modules"];
             foreach (var list in lists)
