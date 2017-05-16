@@ -14,6 +14,7 @@ namespace ImpactWebsite.Models.OrderModels
         public int OrderHeaderId {get;set;}
         public OrderHeader OrderHeader { get; set; }
         public int ModuleId { get; set; }
-        public OrderModule Modules { get; set; }
+        public string ModuleName { get; set; }
+        public OrderModule Module { get; set; }
     }
 }

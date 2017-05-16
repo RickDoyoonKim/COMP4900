@@ -22,7 +22,7 @@ namespace ImpactWebsite.Controllers
         // GET: OrderLines
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.OrderLines.Include(o => o.Modules).Include(o => o.OrderHeader);
+            var applicationDbContext = _context.OrderLines.Include(o => o.Module.ModuleId).Include(o => o.OrderHeader);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace ImpactWebsite.Controllers
             }
 
             var orderLine = await _context.OrderLines
-                .Include(o => o.Modules)
+                .Include(o => o.Module)
                 .Include(o => o.OrderHeader)
                 .SingleOrDefaultAsync(m => m.OrderLineId == id);
             if (orderLine == null)
@@ -136,7 +136,7 @@ namespace ImpactWebsite.Controllers
             }
 
             var orderLine = await _context.OrderLines
-                .Include(o => o.Modules)
+                .Include(o => o.Module.ModuleId)
                 .Include(o => o.OrderHeader)
                 .SingleOrDefaultAsync(m => m.OrderLineId == id);
             if (orderLine == null)

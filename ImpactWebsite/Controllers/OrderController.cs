@@ -17,6 +17,7 @@ using System.IO;
 using ImpactWebsite.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ImpactWebsite.Controllers
 {
@@ -29,11 +30,15 @@ namespace ImpactWebsite.Controllers
         private readonly ILogger _logger;
         private static string _EmailAddress;
         private static string _TotalAmount;
+        private static string _TotalDay;
+        private static int _OrderNumber;
+        private readonly string _externalCookieScheme;
 
-        public OrderController(ApplicationDbContext context, 
-                               UserManager<ApplicationUser> UserManager, 
+        public OrderController(ApplicationDbContext context,
+                               UserManager<ApplicationUser> UserManager,
                                IHostingEnvironment environment,
                                SignInManager<ApplicationUser> SignInManager,
+                               IOptions<IdentityCookieOptions> identityCookieOptions,
                                ILoggerFactory loggerFactory)
         {
             _context = context;
@@ -41,12 +46,14 @@ namespace ImpactWebsite.Controllers
             _environment = environment;
             _SignInManager = SignInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string message)
         {
             ApplicationUser user = await _UserManager.GetUserAsync(HttpContext.User);
-
-            if (_SignInManager.IsSignedIn(User)) { 
+            @ViewData["error"] = message;
+            if (_SignInManager.IsSignedIn(User))
+            {
                 _EmailAddress = await _UserManager.GetEmailAsync(user);
                 ViewData["email"] = _EmailAddress;
             }
@@ -65,33 +72,62 @@ namespace ImpactWebsite.Controllers
             return View(OrderLists);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult NewOrder()
+        {
+            ViewData["DeliverDate"] = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)).ToString("MMM dd yyyy");
+            ViewData["TotalDay"] = _TotalDay;
+            ViewData["TotalAmount"] = _TotalAmount;
+
+            var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == _OrderNumber).Include(o => o.Module.UnitPrice);
+            return View(OrderLines.ToList());
+        }
+
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> NewOrder(IFormCollection collection, string email, string totalPrice, string totalDay)
         {
+            int NewOrderNumber = 1;
+
             ApplicationUser user = await _UserManager.GetUserAsync(HttpContext.User);
+            ApplicationUser TempUser;
             _TotalAmount = totalPrice;
+            _TotalDay = totalDay;
+            ViewData["DeliverDate"] = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)).ToString("MMM dd yyyy");
             ViewData["TotalDay"] = totalDay;
             ViewData["TotalAmount"] = totalPrice;
-            
+
             if (_SignInManager.IsSignedIn(User))
             {
+                TempUser = user;
                 _EmailAddress = await _UserManager.GetEmailAsync(user);
                 ViewData["email"] = _EmailAddress;
-            } else
+            }
+            else
             {
-                _EmailAddress = email;
+                var findUser = await _UserManager.FindByEmailAsync(email);
+                var notRegisteredUser = await _UserManager.FindByEmailAsync("test@test.com");
+                if (findUser != null)
+                {
+                    TempUser = findUser;
+                } else
+                {
+                    TempUser = notRegisteredUser;
+                }
+                _EmailAddress = email;                
             }
             ViewData["email"] = email;
-            int NewOrderNumber = 1;
+            
             if (!_context.OrderHeaders.Any())
             {
-
                 _context.OrderHeaders.Add(new OrderHeader()
                 {
                     UserEmail = email,
                     OrderedDate = DateTime.Now,
+                    DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = NewOrderNumber,
-
+                    UserId = TempUser.Id
                 });
             }
             else
@@ -101,32 +137,40 @@ namespace ImpactWebsite.Controllers
                 {
                     UserEmail = email,
                     OrderedDate = DateTime.Now,
+                    DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = NewOrderNumber,
+                    UserId = TempUser.Id
                 });
             }
 
             await _context.SaveChangesAsync();
-            
+
             var lists = collection["modules"];
             foreach (var list in lists)
             {
-                var test = JsonConvert.DeserializeObject<OrderList>(list);
+                var jsonObj = JsonConvert.DeserializeObject<OrderList>(list);
                 _context.OrderLines.Add(new OrderLine()
                 {
                     ModifiedDate = DateTime.Now,
                     OrderHeaderId = _context.OrderHeaders.FirstOrDefault(o => o.OrderNum == NewOrderNumber).OrderHeaderId,
-                    ModuleId = test.Modules.ModuleId,
+                    ModuleId = jsonObj.Modules.ModuleId,
+                    ModuleName = jsonObj.Modules.ModuleName
                 });
-
             }
-
             await _context.SaveChangesAsync();
 
-            return View();
+            //var OrderHeaderModel = _context.OrderHeaders
+            //                      .Include(o => o.OrderLines)
+            //                      .FirstOrDefault(o => o.OrderNum == NewOrderNumber);
+            _OrderNumber = NewOrderNumber;
+            var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == NewOrderNumber).Include(o => o.Module.UnitPrice);
+            ViewData["orderNumber"] = NewOrderNumber;
+            return View(OrderLines.ToList());
         }
         [HttpGet]
         public IActionResult FileUpdaload()
         {
+            ViewData["email"] = _EmailAddress;
             ViewData["TotalAmount"] = _TotalAmount;
             return PartialView("_Investment");
         }
@@ -134,6 +178,7 @@ namespace ImpactWebsite.Controllers
         [HttpPost]
         public async Task<IActionResult> FileUpdaload(ICollection<IFormFile> files)
         {
+            ViewData["TotalAmount"] = _TotalAmount;
             DateTime dtNow = DateTime.Now;
             string UpdateDate = dtNow.ToString("ddMMyyyy");
             string uploads = Path.Combine(_environment.WebRootPath, "uploads/" + UpdateDate + "/" + _EmailAddress);
@@ -153,7 +198,9 @@ namespace ImpactWebsite.Controllers
                     }
                 }
             }
-            return View("NewOrder");
+            var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == _OrderNumber).Include(o => o.Module.UnitPrice);
+            ViewData["orderNumber"] = _OrderNumber;
+            return View("NewOrderPayOnly", OrderLines.ToList());
         }
 
         [HttpGet]
@@ -171,12 +218,29 @@ namespace ImpactWebsite.Controllers
             var DetailModules = _context.Modules.FirstOrDefault(m => m.ModuleId == Convert.ToInt32(id));
             return PartialView("_PartialModuleDetail", DetailModules);
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterLogin(int id)
+        {
+            string userEmail = _context.OrderHeaders.FirstOrDefault(o => o.OrderNum == id).UserEmail;
+
+            if (await _UserManager.FindByEmailAsync(userEmail) == null)
+            {
+                ViewData["checkUser"] = "NeedRegister";
+            } else
+            {
+                ViewData["checkUser"] = "NeedLogin";
+            }
+
+            return View("RegisterLogin");
+        }
         //
         // GET: /Account/_Register
         [HttpGet]
         [AllowAnonymous]
         public IActionResult PartialRegister(string returnUrl = null)
         {
+            ViewData["email"] = _EmailAddress;
             ViewData["ReturnUrl"] = returnUrl;
             return PartialView("_Register", new RegisterViewModel());
         }
@@ -188,7 +252,7 @@ namespace ImpactWebsite.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, NewsletterRequired = model.NewsLetterRequired };
+                var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, NewsletterRequired = model.NewsLetterRequired };
                 var result = await _UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -208,6 +272,53 @@ namespace ImpactWebsite.Controllers
 
             // If we got this far, something failed, redisplay form
             return RedirectToAction("NewOrder");
+        }
+
+        //
+        // GET: /Account/Login
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> PartialLogin(string returnUrl = null)
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+
+            ViewData["ReturnUrl"] = returnUrl;
+            return PartialView("_Login", new LoginViewModel());
+        }
+
+        //
+        // POST: /Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PartialLogin(LoginViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation(1, "User logged in.");
+                    return RedirectToAction("NewOrder");
+                }
+                if (result.IsLockedOut)
+                {
+                    _logger.LogWarning(2, "User account locked out.");
+                    return View("Lockout");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
         #region Helpers
 

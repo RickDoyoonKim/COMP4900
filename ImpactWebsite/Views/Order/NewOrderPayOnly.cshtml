@@ -1,0 +1,40 @@
+@model IEnumerable<ImpactWebsite.Models.OrderModels.OrderLine>
+
+@{
+    ViewData["Title"] = "NewOrder";
+}
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<table class="table table-bordered table-responsive table-hover" style="margin-top: 50px;">
+    <caption style="text-align: center; font-size: large; font-weight:bold;">Order Number: @ViewData["orderNumber"]</caption>
+    <thead>
+        <tr>
+            <th>Module Name</th>
+            <th>Module Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderlist in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => orderlist.Module.ModuleName)</td>
+                <td>@Html.DisplayFor(modelItem => orderlist.Module.UnitPrice.Price)</td>
+            </tr>
+        }
+        <tr>
+            <td style="font-size: medium; font-weight: bold;">Estimate Deliver Date: @ViewData["DeliverDate"]</td>
+            <td style="font-size: medium; font-weight: bold;">$@ViewData["TotalAmount"]</td>
+        </tr>
+    </tbody>
+</table>
+
+<section style="width: 70%; margin-top: 100px;">
+    <div style="width: 250px; margin-left: 50%; text-align: center;">
+        <a id="Charge" asp-controller="Billing" asp-action="Index" asp-route-id="@ViewData["TotalAmount"]" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">
+            <i class="glyphicon glyphicon-align-center"></i> Request & Payment
+        </a>
+    </div>
+
+</section>
