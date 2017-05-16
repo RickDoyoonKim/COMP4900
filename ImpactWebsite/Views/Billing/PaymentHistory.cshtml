@@ -1,0 +1,49 @@
+@model IEnumerable<ImpactWebsite.Models.BillingModels.BillingDetailViewModel>
+
+@{
+    ViewData["Title"] = "PaymentHistory";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h2><i class="fa fa-file-o"></i>  Payment History</h2>
+<hr />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderHeaderId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModuleId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModuleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderHeaderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModuleId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModuleName)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+        </tr>
+    }
+</table>
