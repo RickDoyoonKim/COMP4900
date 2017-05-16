@@ -65,14 +65,20 @@ namespace ImpactWebsite.Controllers
             return View(OrderLists);
         }
 
+
+
+
         [HttpPost]
-        public async Task<IActionResult> NewOrder(IFormCollection collection, string email, string totalPrice, string totalDay)
+        public async Task<IActionResult> NewOrder(IFormCollection collection, string email, string totalPrice, string totalPriceInt, string totalDay)
         {
             ApplicationUser user = await _UserManager.GetUserAsync(HttpContext.User);
             _TotalAmount = totalPrice;
             ViewData["TotalDay"] = totalDay;
             ViewData["TotalAmount"] = totalPrice;
-            
+            ViewData["LoggedinUserId"] = user.Id;
+
+            int totalAmount = Int32.Parse(totalPriceInt);
+
             if (_SignInManager.IsSignedIn(User))
             {
                 _EmailAddress = await _UserManager.GetEmailAsync(user);
@@ -91,7 +97,8 @@ namespace ImpactWebsite.Controllers
                     UserEmail = email,
                     OrderedDate = DateTime.Now,
                     OrderNum = NewOrderNumber,
-
+                    UserId = user.Id,
+                    TotalAmount = totalAmount
                 });
             }
             else
@@ -102,11 +109,16 @@ namespace ImpactWebsite.Controllers
                     UserEmail = email,
                     OrderedDate = DateTime.Now,
                     OrderNum = NewOrderNumber,
+                    UserId = user.Id,
+                    TotalAmount = totalAmount
                 });
             }
 
             await _context.SaveChangesAsync();
-            
+
+            var newOrderHeader = _context.OrderHeaders.SingleOrDefault(x => x.OrderHeaderId == NewOrderNumber);
+            ViewData["OrderId"] = newOrderHeader.OrderHeaderId;
+
             var lists = collection["modules"];
             foreach (var list in lists)
             {

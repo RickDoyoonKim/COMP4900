@@ -12,8 +12,9 @@
             <i class="glyphicon glyphicon-align-center"></i>Input Investment Information
         </a>
     </div>
-    <div style="width: 250px; margin-left: 50%; text-align: center;">
-        <a id="Charge" asp-controller="Charge" asp-action="Index" asp-route-id="@ViewData["TotalAmount"]" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">
+    <div style="width: 250px; margin-left: 50%; text-align: center;"> 
+
+        <a href="@Url.Action("Index", "Billing", new { id = @ViewData["LoggedinUserId"], orderId = @ViewData["OrderId"] })" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">    
             <i class="glyphicon glyphicon-align-center"></i> Request & Payment
         </a>
     </div>

@@ -37,11 +37,14 @@ namespace ImpactWebsite.Models.OrderModels
         [Required]
         public string UserEmail { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         //public Promotion Promotion { get; set; }
         //public int PromotionId { get; set; }
         public int OrderLineId { get; set; }
         public List<OrderLine> OrderLines { get; set; }
+
+        [Display(Name = "Total Amount")]
+        public int TotalAmount { get; set; }
     
         //public List<Investment> Investments { get; set; }
     }

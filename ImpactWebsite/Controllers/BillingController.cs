@@ -12,64 +12,75 @@ using System.Security.Claims;
 using System.Security.Principal;
 using ImpactWebsite.Common;
 using ImpactWebsite.Models;
+using Microsoft.AspNetCore.Authorization;
+using ImpactWebsite.Data;
+using ImpactWebsite.Models.OrderModels;
 
 namespace ImpactWebsite.Controllers
 {
+    [Authorize]
     public class BillingController : Controller
     {
-        private StripeSettings _stripeSettings;
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
+        private int _amountInt;
+        private static string _emailAddress;
 
-        /*
-        public ChargeController(
-            StripeSettings stripeSettings,
-            UserManager<ApplicationUser> userManager)
+        public BillingController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
-            _stripeSettings = stripeSettings;
+            _context = context;
             _userManager = userManager;
-        }*/
-
-        public async Task<IActionResult> Index()
-        {
-            /*
-            var userId = User.GetUserId();
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
-
-            ViewBag.StripeKey = _stripeSettings.PublishableKey;*/
-
-            return View();
+            _signInManager = signInManager;
         }
-
-        public async Task<IActionResult> Charge([FromForm]string stripeToken)
+   
+        public async Task<IActionResult> Index(string id, int orderId)
         {
-            var userId = User.GetUserId();
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
 
-            if (string.IsNullOrEmpty(user.Id))
+            List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
+
+            var billingDetails = (from u in _context.Users
+                                  join oh in _context.OrderHeaders on u.Id equals oh.UserId
+                                  join ol in _context.OrderLines on oh.OrderHeaderId equals ol.OrderHeaderId
+                                  join m in _context.Modules on ol.ModuleId equals m.ModuleId
+                                  select new {
+                                      OrderHeaderId = oh.OrderHeaderId,
+                                      UserId = u.Id,
+                                      UserEmail = u.Email,
+                                      ModuleId = m.ModuleId,
+                                      ModuleName = m.ModuleName,
+                                      TotalAmount = oh.TotalAmount
+                                  }).ToList();
+
+            foreach (var billing in billingDetails)
             {
-                var customers = new StripeCustomerService();
-                var charges = new StripeChargeService();
-
-                var customer = customers.Create(new StripeCustomerCreateOptions
+                billingVM.Add(new BillingDetailViewModel()
                 {
-                    Email = $"{user.Email}",
-                    Description = $"{user.Email}[{userId}]",
-                    SourceToken = stripeToken
+                    OrderHeaderId = billing.OrderHeaderId,
+                    UserId = billing.UserId,
+                    UserEmail = billing.UserEmail,
+                    ModuleId = billing.ModuleId,
+                    ModuleName = billing.ModuleName,
+                    TotalAmount = billing.TotalAmount
                 });
+            };
 
-                var charge = charges.Create(new StripeChargeCreateOptions
-                {
-                    Amount = 500,
-                    Description = "Sample Charge",
-                    Currency = "usd",
-                    CustomerId = customer.Id
-                });
-
+            if (_signInManager.IsSignedIn(User))
+            {
+                _emailAddress = await _userManager.GetEmailAsync(user);
+                ViewData["email"] = _emailAddress;
             }
 
+            var orders = _context.OrderHeaders.Where(t => t.UserId == id);
 
-
-            return View();
+            ViewData["amount"] = 0;
+            _amountInt = 0;
+            ViewData["amountInt"] = _amountInt * 100;
+            return View(billingVM);
         }
 
         public IActionResult Charge(string stripeEmail, string stripeToken)
@@ -85,9 +96,9 @@ namespace ImpactWebsite.Controllers
 
             var charge = charges.Create(new StripeChargeCreateOptions
             {
-                Amount = 500,
-                Description = "Sample Charge",
-                Currency = "usd",
+                Amount = _amountInt,
+                Description = "Module Charge",
+                Currency = "cad",
                 CustomerId = customer.Id
             });
 
