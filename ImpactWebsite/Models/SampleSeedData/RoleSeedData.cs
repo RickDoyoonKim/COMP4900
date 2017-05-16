@@ -40,7 +40,7 @@ namespace ImpactWebsite.Models
                 Email = "admin@admin.com",
                 NormalizedEmail = "ADMIN@ADMIN.COM",
                 UserName = "admin@admin.com",
-                NormalizedUserName = "ADMIN",
+                NormalizedUserName = "ADMIN@ADMIN.COM",
                 PhoneNumber = "000-000-0000",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
@@ -56,7 +56,7 @@ namespace ImpactWebsite.Models
                 Email = "test@test.com",
                 NormalizedEmail = "TEST@TEST.COM",
                 UserName = "test@test.com",
-                NormalizedUserName = "TEST",
+                NormalizedUserName = "TEST@TEST.COM",
                 PhoneNumber = "000-000-0000",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
@@ -84,8 +84,8 @@ namespace ImpactWebsite.Models
                 var userStore = new UserStore<ApplicationUser>(context);
                 var result = userStore.CreateAsync(member);
 
-                await AssignRoles(isp, admin.UserName, "Admin");
-                await AssignRoles(isp, member.UserName, "Member");
+                await AssignRoles(isp, admin.Email, "Admin");
+                await AssignRoles(isp, member.Email, "Member");
             }
 
             await context.SaveChangesAsync();

@@ -97,8 +97,7 @@ namespace ImpactWebsite.Controllers
             ViewData["DeliverDate"] = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)).ToString("MMM dd yyyy");
             ViewData["TotalDay"] = totalDay;
             ViewData["TotalAmount"] = totalPrice;
-            ViewData["LoggedinUserId"] = user.Id;
-
+            
             int totalAmount = Int32.Parse(totalPriceInt);
 
             if (_SignInManager.IsSignedIn(User))
@@ -121,7 +120,9 @@ namespace ImpactWebsite.Controllers
                 _EmailAddress = email;                
             }
             ViewData["email"] = email;
-            
+
+            ViewData["LoggedinUserId"] = TempUser.Id;
+
             if (!_context.OrderHeaders.Any())
             {
                 _context.OrderHeaders.Add(new OrderHeader()
@@ -130,7 +131,7 @@ namespace ImpactWebsite.Controllers
                     OrderedDate = DateTime.Now,
                     DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = NewOrderNumber,
-                    UserId = TempUser.Id
+                    UserId = TempUser.Id,
                     TotalAmount = totalAmount
                 });
             }
@@ -143,7 +144,7 @@ namespace ImpactWebsite.Controllers
                     OrderedDate = DateTime.Now,
                     DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = NewOrderNumber,
-                    UserId = TempUser.Id
+                    UserId = TempUser.Id,
                     TotalAmount = totalAmount
                 });
             }
@@ -333,11 +334,13 @@ namespace ImpactWebsite.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
+                    //return RedirectToAction("NewOrder");
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            //return View(model);
+            return RedirectToAction("NewOrder");
         }
         #region Helpers
 

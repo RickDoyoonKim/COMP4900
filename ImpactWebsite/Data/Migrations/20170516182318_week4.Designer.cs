@@ -9,8 +9,8 @@ using ImpactWebsite.Models.OrderModels;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170516101839_Migration_0")]
-    partial class Migration_0
+    [Migration("20170516182318_week4")]
+    partial class week4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,6 +144,8 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<string>("SalesRep")
                         .HasMaxLength(160);
+
+                    b.Property<int>("TotalAmount");
 
                     b.Property<string>("UserEmail")
                         .IsRequired();
