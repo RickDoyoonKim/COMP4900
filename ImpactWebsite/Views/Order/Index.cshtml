@@ -75,7 +75,8 @@
                 <td></td>
                 <td>Total: </td>
                 <td><input type="text" name="totalDay" value="3" readonly="readonly" /></td>
-                <td><input type="text" name="totalPrice" value="0" readonly="readonly"  /></td>
+                <td><input type="text" name="totalPrice" value="0" readonly="readonly"  /></td>                
+                <td><input type="hidden" name="totalPriceInt" readonly="readonly" /></td>
             </tr>
         </tbody>
     </table>
@@ -112,7 +113,10 @@
             });
             $('input[name=totalDay]').val(totalDays);
             $('input[name=totalPrice]').val(totalPrice.toFixed(2));
+            $('input[name=totalPriceInt]').val(totalPrice * 100);
         }
+
+
     </script>
 
     <script type="text/javascript">

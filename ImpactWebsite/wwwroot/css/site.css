@@ -50,29 +50,6 @@ textarea {
 }
 
 /* Impact Website */
-ul#module-list li {
-    height: 160px;
-}
-
-ul#module-list li img:hover {
-    box-shadow: 1px 1px 7px #777;
-}
-
-ul#module-list li img {
-    box-shadow: 1px 1px 5px #999;
-    border: none;
-    padding: 0;
-}
-
-ul#module-list li a, ul#album-details li a {
-    text-decoration: none;
-}
-
-ul#module-list li a:hover {
-    background: none;
-    text-shadow: 1px 1px 2px #bbb;
-    color: #363430;
-}
 .btnAnalysis {
     padding-top: 20%;
     background-image: url(../images/background_1.jpg);
@@ -84,3 +61,5 @@ ul#module-list li a:hover {
     font-weight: 900;
     margin-bottom: 100px;
 }
+
+

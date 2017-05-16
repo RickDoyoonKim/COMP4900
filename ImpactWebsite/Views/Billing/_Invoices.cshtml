@@ -1,4 +1,4 @@
-@model IEnumerable<ImpactWebiste.Models.BillingModels.Invoice>
+@model IEnumerable<ImpactWebsite.Models.BillingModels.Invoice>
 
 <h3><i class="fa fa-file-o"></i> Invoices</h3>
 @if (Model != null && Model.Any())
@@ -18,13 +18,13 @@
             @foreach (var invoice in Model)
             {
                 <tr>
-                    <td>@invoice.Id</td>
+                    <td>@invoice.InvoiceId</td>
                     <td>@invoice.InvoicePeriod</td>
                     <td>@invoice.Date.Value.ToString("d MMM yyyy")</td>
                     <td>@invoice.CurrencyDetails.CurrencySymbol@string.Format("{0:F2}", invoice.Subtotal)</td>
                     <td>@invoice.CurrencyDetails.CurrencySymbol@string.Format("{0:F2}", invoice.Total)</td>
                     <td>
-                        <a href="@Url.Action("Invoice", "Billing", new {id = @invoice.Id})">
+                        <a href="@Url.Action("Invoice", "Billing", new {id = @invoice.InvoiceId})">
                             <i class="fa fa-file-text-o"></i> Details
                         </a>
                     </td>

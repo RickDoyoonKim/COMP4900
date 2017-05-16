@@ -11,6 +11,7 @@ using ImpactWebsite.Services;
 using Stripe;
 using ImpactWebsite.Models.SampleSeedData;
 using ImpactWebsite.Models;
+using Microsoft.AspNetCore.Routing;
 
 namespace ImpactWebsite
 {
@@ -82,7 +83,7 @@ namespace ImpactWebsite
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}/{*more}");
             });
 
             StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
@@ -90,5 +91,6 @@ namespace ImpactWebsite
             ModuleSeedData.Initialize(context);
             RoleSeedData.Initialize(app.ApplicationServices);
         }
+
     }
 }

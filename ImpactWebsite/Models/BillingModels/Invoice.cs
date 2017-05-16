@@ -24,9 +24,8 @@ namespace ImpactWebsite.Models.BillingModels
 
         public string Currency { get; set; }
 
-       // [NotMapped]
-       // public Currency CurrencyDetails { get; }
-
+        [NotMapped]
+        public Currency CurrencyDetails { get; }
 
         public DateTime? Date { get; set; }
 
