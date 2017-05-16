@@ -116,8 +116,19 @@ namespace ImpactWebsite.Controllers
 
             await _context.SaveChangesAsync();
 
-            var newOrderHeader = _context.OrderHeaders.SingleOrDefault(x => x.OrderHeaderId == NewOrderNumber);
-            ViewData["OrderId"] = newOrderHeader.OrderHeaderId;
+            try
+            {
+                var newOrderHeader = _context.OrderHeaders.SingleOrDefault(x => x.OrderNum == NewOrderNumber);
+                ViewData["OrderId"] = newOrderHeader.OrderHeaderId;
+                if(ViewData["OrderId"] == null)
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("ArgumentNullException source: {0}", e.Source);
+            }
 
             var lists = collection["modules"];
             foreach (var list in lists)

@@ -24,7 +24,7 @@ namespace ImpactWebsite.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
-        private int _amountInt;
+        private static int _amountInt;
         private static string _emailAddress;
 
         public BillingController(
@@ -40,34 +40,7 @@ namespace ImpactWebsite.Controllers
         public async Task<IActionResult> Index(string id, int orderId)
         {
             ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
-
-            List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
-
-            var billingDetails = (from u in _context.Users
-                                  join oh in _context.OrderHeaders on u.Id equals oh.UserId
-                                  join ol in _context.OrderLines on oh.OrderHeaderId equals ol.OrderHeaderId
-                                  join m in _context.Modules on ol.ModuleId equals m.ModuleId
-                                  select new {
-                                      OrderHeaderId = oh.OrderHeaderId,
-                                      UserId = u.Id,
-                                      UserEmail = u.Email,
-                                      ModuleId = m.ModuleId,
-                                      ModuleName = m.ModuleName,
-                                      TotalAmount = oh.TotalAmount
-                                  }).ToList();
-
-            foreach (var billing in billingDetails)
-            {
-                billingVM.Add(new BillingDetailViewModel()
-                {
-                    OrderHeaderId = billing.OrderHeaderId,
-                    UserId = billing.UserId,
-                    UserEmail = billing.UserEmail,
-                    ModuleId = billing.ModuleId,
-                    ModuleName = billing.ModuleName,
-                    TotalAmount = billing.TotalAmount
-                });
-            };
+            var totalAmount = 0;
 
             if (_signInManager.IsSignedIn(User))
             {
@@ -75,12 +48,59 @@ namespace ImpactWebsite.Controllers
                 ViewData["email"] = _emailAddress;
             }
 
-            var orders = _context.OrderHeaders.Where(t => t.UserId == id);
+            if (id != null)
+            {            
+                List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
 
-            ViewData["amount"] = 0;
-            _amountInt = 0;
-            ViewData["amountInt"] = _amountInt * 100;
-            return View(billingVM);
+                var billingDetails = (from u in _context.Users
+                                      join oh in _context.OrderHeaders on u.Id equals oh.UserId
+                                      join ol in _context.OrderLines on oh.OrderHeaderId equals ol.OrderHeaderId
+                                      join m in _context.Modules on ol.ModuleId equals m.ModuleId
+                                      select new
+                                      {
+                                          OrderHeaderId = oh.OrderHeaderId,
+                                          UserId = u.Id,
+                                          UserEmail = u.Email,
+                                          ModuleId = m.ModuleId,
+                                          ModuleName = m.ModuleName,
+                                          UnitPrice = m.UnitPrice.Price,
+                                          TotalAmount = oh.TotalAmount
+                                      }).ToList();
+
+                var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderHeaderId == orderId).ToList();
+
+                foreach (var billing in temps)
+                {
+                    billingVM.Add(new BillingDetailViewModel()
+                    {
+                        OrderHeaderId = billing.OrderHeaderId,
+                        UserId = billing.UserId,
+                        UserEmail = billing.UserEmail,
+                        ModuleId = billing.ModuleId,
+                        ModuleName = billing.ModuleName,
+                        UnitPrice = billing.UnitPrice,
+                        TotalAmount = billing.TotalAmount
+                    });
+                };
+
+                ViewBag.PaymentDetails = billingVM;
+
+                var moduleCount = 0;
+
+
+                foreach (var billing in billingVM)
+                {
+                    moduleCount += 1;
+                    totalAmount = billing.TotalAmount;
+                }
+
+                ViewData["amount"] = totalAmount;
+                ViewData["amountDisplay"] = totalAmount/100;
+                ViewData["moduleCount"] = moduleCount;        
+            }
+
+            _amountInt = totalAmount;
+            return View();
         }
 
         public IActionResult Charge(string stripeEmail, string stripeToken)
@@ -94,7 +114,7 @@ namespace ImpactWebsite.Controllers
                 SourceToken = stripeToken
             });
 
-            var charge = charges.Create(new StripeChargeCreateOptions
+           var charge = charges.Create(new StripeChargeCreateOptions
             {
                 Amount = _amountInt,
                 Description = "Module Charge",
@@ -103,6 +123,42 @@ namespace ImpactWebsite.Controllers
             });
 
             return View();
+        }
+
+        public IActionResult PaymentHistory()
+        {
+            List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
+
+            var billingDetails = (from u in _context.Users
+                                  join oh in _context.OrderHeaders on u.Id equals oh.UserId
+                                  join ol in _context.OrderLines on oh.OrderHeaderId equals ol.OrderHeaderId
+                                  join m in _context.Modules on ol.ModuleId equals m.ModuleId
+                                  select new
+                                  {
+                                      OrderHeaderId = oh.OrderHeaderId,
+                                      UserId = u.Id,
+                                      UserEmail = u.Email,
+                                      ModuleId = m.ModuleId,
+                                      ModuleName = m.ModuleName,
+                                      UnitPrice = m.UnitPrice.Price,
+                                      TotalAmount = oh.TotalAmount
+                                  }).ToList();
+
+            foreach (var billing in billingDetails)
+            {
+                billingVM.Add(new BillingDetailViewModel()
+                {
+                    OrderHeaderId = billing.OrderHeaderId,
+                    UserId = billing.UserId,
+                    UserEmail = billing.UserEmail,
+                    ModuleId = billing.ModuleId,
+                    ModuleName = billing.ModuleName,
+                    UnitPrice = billing.UnitPrice,
+                    TotalAmount = billing.TotalAmount
+                });
+            };
+
+            return View(billingVM);
         }
 
         public IActionResult Error()
