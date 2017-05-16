@@ -13,14 +13,15 @@
     <h2>Select Modules</h2>
 
 <form action="/Order/NewOrder" method="post">
-    <label style="color: brown;">*Email Address: </label>
+    
+    <label style="color: brown;">* Email Address: </label>
     @if (SignInManager.IsSignedIn(User))
     {
         <input type="email" required="required" name="email" value="@ViewData["email"]" />
     }
     else
     {
-        <input type="email" required="required" name="email" value="" />
+        <input type="email" required="required" name="email" />
     }
 
     <table class="table">
@@ -47,8 +48,11 @@
                     <td>
                         @if (@i == 0)
                         {
-                            <input type="checkbox" checked="checked" disabled="disabled" name="modules" value='@Html.Raw(Json.Serialize(Model.ElementAt(@i)))' />
-                        } else { 
+                            <input type="checkbox" checked="checked" disabled="disabled" value='@Html.Raw(Json.Serialize(Model.ElementAt(@i)))' />
+                            <input type="hidden" name="modules" value='@Html.Raw(Json.Serialize(Model.ElementAt(@i)))' />
+                        }
+                        else
+                        {
                             <input type="checkbox" name="modules" class="chkBox" value='@Html.Raw(Json.Serialize(Model.ElementAt(@i)))' />
                         }
                     </td>
@@ -91,10 +95,10 @@
 
 @section scripts
 {
-        <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" />
-
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" />
     <script type="text/javascript">
         $(document).ready(function () {
             $("input[type='checkbox']").click(function () {

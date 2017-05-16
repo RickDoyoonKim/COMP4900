@@ -1,3 +1,4 @@
+@model IEnumerable<ImpactWebsite.Models.OrderModels.OrderLine>
 
 @{
     ViewData["Title"] = "NewOrder";
@@ -6,17 +7,52 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+    <table class="table table-bordered table-responsive table-hover" style="margin-top: 50px;">
+        <caption style="text-align: center; font-size: large; font-weight:bold;">Order Number: @ViewData["orderNumber"]</caption>
+        <thead>
+            <tr>
+                <th>Module Name</th>
+                <th>Module Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var orderlist in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => orderlist.Module.ModuleName)</td>
+                    <td>@Html.DisplayFor(modelItem => orderlist.Module.UnitPrice.Price)</td>
+                </tr>
+            }
+            <tr>
+                <td style="font-size: medium; font-weight: bold;">Estimate Deliver Date: @ViewData["DeliverDate"]</td>
+                <td style="font-size: medium; font-weight: bold;">$@ViewData["TotalAmount"]</td>
+            </tr>
+        </tbody>
+    </table>
+
 <section style="width: 70%; margin-top: 100px; margin-left: 20%;">
     <div style="width: 250px; float: left; text-align: center;">
         <a id="FileUpload" style="display:block; width:250px; height:100px; padding: 30px;" class="btn-lg btn-primary">
             <i class="glyphicon glyphicon-align-center"></i>Input Investment Information
         </a>
     </div>
-    <div style="width: 250px; margin-left: 50%; text-align: center;"> 
 
-        <a href="@Url.Action("Index", "Billing", new { id = @ViewData["LoggedinUserId"], orderId = @ViewData["OrderId"] })" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">    
-            <i class="glyphicon glyphicon-align-center"></i> Request & Payment
-        </a>
+    <div style="width: 250px; margin-left: 50%; text-align: center;">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            @*<a id="Charge" asp-controller="Billing" asp-action="Index" asp-route-id="@ViewData["orderNumber"]" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">
+                <i class="glyphicon glyphicon-align-center"></i> Request & Payment
+            </a>*@
+            <a href="@Url.Action("Index", "Billing", new { id = @ViewData["LoggedinUserId"], orderId = @ViewData["OrderId"] })" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">    
+                <i class="glyphicon glyphicon-align-center"></i> Request & Payment
+            </a>
+        }
+        else
+        {
+            <a id="Charge" asp-controller="Order" asp-action="RegisterLogin" asp-route-id="@ViewData["orderNumber"]" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">
+                <i class="glyphicon glyphicon-align-center"></i> Request & Payment
+            </a>
+        }
     </div>
 
 </section>
@@ -25,9 +61,9 @@
 
 @section scripts
     {
-    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-    <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" />
+    <script type="text/javascript" src="../lib/jquery/dist/jquery.js"></script>
+    <script src="../lib/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="../lib/jquery-ui/themes/base/jquery-ui.css" />
 
     <script type="text/javascript">
         $('#FileUpload').on('click', function () {
@@ -36,7 +72,7 @@
             type: 'GET',
             autoOpen: true,
             position: { my: "top", at: "top+150", of: window },
-            width: 600,
+            width: 500,
             height: 200,
             resizable: false,
             title: 'Upload Files',

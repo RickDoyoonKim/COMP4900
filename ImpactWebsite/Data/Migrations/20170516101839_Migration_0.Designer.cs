@@ -9,7 +9,7 @@ using ImpactWebsite.Models.OrderModels;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170515024928_Migration_0")]
+    [Migration("20170516101839_Migration_0")]
     partial class Migration_0
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,8 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(160);
+
+                    b.Property<bool>("IsTempUser");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -134,8 +136,6 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<string>("NoteFromUser");
 
-                    b.Property<int>("OrderLineId");
-
                     b.Property<int>("OrderNum");
 
                     b.Property<int>("OrderStatus");
@@ -148,7 +148,7 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<string>("UserEmail")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("OrderHeaderId");
 
@@ -165,6 +165,8 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<DateTime>("ModifiedDate");
 
                     b.Property<int>("ModuleId");
+
+                    b.Property<string>("ModuleName");
 
                     b.Property<int>("OrderHeaderId");
 
@@ -354,7 +356,7 @@ namespace ImpactWebsite.Data.Migrations
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderModels.OrderLine", b =>
                 {
-                    b.HasOne("ImpactWebsite.Models.OrderModels.OrderModule", "Modules")
+                    b.HasOne("ImpactWebsite.Models.OrderModels.OrderModule", "Module")
                         .WithMany("OrderLines")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade);

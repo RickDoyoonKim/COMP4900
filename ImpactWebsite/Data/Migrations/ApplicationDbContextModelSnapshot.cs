@@ -39,6 +39,8 @@ namespace ImpactWebsite.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(160);
 
+                    b.Property<bool>("IsTempUser");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(160);
@@ -133,8 +135,6 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<string>("NoteFromUser");
 
-                    b.Property<int>("OrderLineId");
-
                     b.Property<int>("OrderNum");
 
                     b.Property<int>("OrderStatus");
@@ -166,6 +166,8 @@ namespace ImpactWebsite.Data.Migrations
                     b.Property<DateTime>("ModifiedDate");
 
                     b.Property<int>("ModuleId");
+
+                    b.Property<string>("ModuleName");
 
                     b.Property<int>("OrderHeaderId");
 
@@ -355,7 +357,7 @@ namespace ImpactWebsite.Data.Migrations
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderModels.OrderLine", b =>
                 {
-                    b.HasOne("ImpactWebsite.Models.OrderModels.OrderModule", "Modules")
+                    b.HasOne("ImpactWebsite.Models.OrderModels.OrderModule", "Module")
                         .WithMany("OrderLines")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade);

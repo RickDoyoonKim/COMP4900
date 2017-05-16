@@ -20,12 +20,10 @@ namespace ImpactWebsite.Models
         [Required]
         [StringLength(160, MinimumLength = 1)]
         public string LastName { get; set; }
-
         [StringLength(160, MinimumLength = 2)]
         public string CompanyName { get; set; }
-
         public bool NewsletterRequired { get; set; }
-        
+        public bool IsTempUser { get; set; }
         public List<OrderHeader> Orders { get; set; }
     }
 }

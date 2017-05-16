@@ -9,11 +9,6 @@ namespace ImpactWebsite.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
-        [StringLength(13, ErrorMessage = "The {0} mucst be at least {2} and at max {1} characters long.", MinimumLength = 4)]
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
-
-        [Required]
         [StringLength(20, ErrorMessage = "The {0} mucst be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

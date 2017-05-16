@@ -20,6 +20,7 @@ namespace ImpactWebsite.Data.Migrations
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 160, nullable: false),
+                    IsTempUser = table.Column<bool>(nullable: false),
                     LastName = table.Column<string>(maxLength: 160, nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
@@ -141,13 +142,12 @@ namespace ImpactWebsite.Data.Migrations
                     DeliveredDate = table.Column<DateTime>(nullable: false),
                     NoteFromAdmin = table.Column<string>(nullable: true),
                     NoteFromUser = table.Column<string>(nullable: true),
-                    OrderLineId = table.Column<int>(nullable: false),
                     OrderNum = table.Column<int>(nullable: false),
                     OrderStatus = table.Column<int>(nullable: false),
                     OrderedDate = table.Column<DateTime>(nullable: false),
                     SalesRep = table.Column<string>(maxLength: 160, nullable: true),
                     UserEmail = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -277,6 +277,7 @@ namespace ImpactWebsite.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ModifiedDate = table.Column<DateTime>(nullable: false),
                     ModuleId = table.Column<int>(nullable: false),
+                    ModuleName = table.Column<string>(nullable: true),
                     OrderHeaderId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

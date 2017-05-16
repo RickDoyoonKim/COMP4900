@@ -9,8 +9,8 @@ namespace ImpactWebsite.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Username")]
-        public string UserName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
