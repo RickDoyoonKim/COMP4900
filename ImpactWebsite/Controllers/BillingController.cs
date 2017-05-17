@@ -93,8 +93,8 @@ namespace ImpactWebsite.Controllers
                     totalAmount = billing.TotalAmount;                    
                 }
 
-                ViewData["amount"] = totalAmount * 100;
-                ViewData["amountDisplay"] = totalAmount;
+                ViewData["amount"] = totalAmount;
+                ViewData["amountDisplay"] = totalAmount/100;
                 ViewData["moduleCount"] = moduleCount;
                 ViewData["orderId"] = orderId;
             }
