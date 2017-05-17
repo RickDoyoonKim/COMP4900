@@ -40,7 +40,9 @@ namespace ImpactWebsite.Controllers
         public async Task<IActionResult> Index(string id, int orderId)
         {
             ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
+            List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
             var totalAmount = 0;
+            var moduleCount = 0;            
 
             if (_signInManager.IsSignedIn(User))
             {
@@ -49,8 +51,7 @@ namespace ImpactWebsite.Controllers
             }
 
             if (id != null)
-            {
-                List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
+            {            
 
                 var billingDetails = (from u in _context.Users
                                       join oh in _context.OrderHeaders on u.Id equals oh.UserId
@@ -64,7 +65,8 @@ namespace ImpactWebsite.Controllers
                                           ModuleId = m.ModuleId,
                                           ModuleName = m.ModuleName,
                                           UnitPrice = m.UnitPrice.Price,
-                                          TotalAmount = oh.TotalAmount
+                                          TotalAmount = oh.TotalAmount,
+                                          OrderStatus = oh.OrderStatus
                                       }).ToList();
 
                 var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderNumber == orderId).ToList();
@@ -79,33 +81,47 @@ namespace ImpactWebsite.Controllers
                         ModuleId = billing.ModuleId,
                         ModuleName = billing.ModuleName,
                         UnitPrice = billing.UnitPrice,
-                        TotalAmount = billing.TotalAmount
+                        TotalAmount = billing.TotalAmount,
+                        OrderStatus = billing.OrderStatus
                     });
                 };
                 
                 ViewBag.PaymentDetails = billingVM;
-
-                var moduleCount = 0;
-
                 foreach (var billing in billingVM)
                 {
                     moduleCount += 1;
-                    totalAmount = billing.TotalAmount;
+                    totalAmount = billing.TotalAmount;                    
                 }
 
                 ViewData["amount"] = totalAmount * 100;
                 ViewData["amountDisplay"] = totalAmount;
-                ViewData["moduleCount"] = moduleCount;        
+                ViewData["moduleCount"] = moduleCount;
+                ViewData["orderId"] = orderId;
             }
 
             _amountInt = totalAmount;
-            return View();
+            return View(billingVM);
         }
 
-        public IActionResult Charge(string stripeEmail, string stripeToken)
+        public async Task<IActionResult> CompleteDefaultOrder(int orderId)
+        {
+            var completedOrders = _context.OrderHeaders.Where(x => x.OrderHeaderId == orderId);
+
+            foreach (var order in completedOrders)
+            {
+                order.OrderStatus = OrderStatusList.Completed;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return View(completedOrders);
+        }
+
+        public async Task<IActionResult> Charge(string stripeEmail, string stripeToken, int orderId)
         {
             var customers = new StripeCustomerService();
             var charges = new StripeChargeService();
+            var completedOrders = _context.OrderHeaders.Where(x => x.OrderHeaderId == orderId);
 
             var customer = customers.Create(new StripeCustomerCreateOptions
             {
@@ -121,12 +137,17 @@ namespace ImpactWebsite.Controllers
                 CustomerId = customer.Id
             });
 
-            return View();
+            foreach (var order in completedOrders) { order.OrderStatus = OrderStatusList.Completed; }
+
+            await _context.SaveChangesAsync();
+
+            return View(completedOrders);
         }
 
         public IActionResult PaymentHistory()
         {
-            List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
+            List<BillingDetailViewModel> histories = new List<BillingDetailViewModel>();
+            string moduleNames = "";
 
             var billingDetails = (from u in _context.Users
                                   join oh in _context.OrderHeaders on u.Id equals oh.UserId
@@ -135,29 +156,28 @@ namespace ImpactWebsite.Controllers
                                   select new
                                   {
                                       OrderHeaderId = oh.OrderHeaderId,
-                                      UserId = u.Id,
-                                      UserEmail = u.Email,
                                       ModuleId = m.ModuleId,
                                       ModuleName = m.ModuleName,
-                                      UnitPrice = m.UnitPrice.Price,
-                                      TotalAmount = oh.TotalAmount
+                                      UnitPrice = m.UnitPrice,
+                                      TotalAmount = oh.TotalAmount,
+                                      OrderStatus = oh.OrderStatus
                                   }).ToList();
+       
 
             foreach (var billing in billingDetails)
             {
-                billingVM.Add(new BillingDetailViewModel()
-                {
+                histories.Add(new BillingDetailViewModel()
+                {                    
                     OrderHeaderId = billing.OrderHeaderId,
-                    UserId = billing.UserId,
-                    UserEmail = billing.UserEmail,
-                    ModuleId = billing.ModuleId,
+                    ModuleNames = moduleNames,
                     ModuleName = billing.ModuleName,
-                    UnitPrice = billing.UnitPrice,
-                    TotalAmount = billing.TotalAmount
+                    UnitPrice = billing.UnitPrice.Price,
+                    TotalAmount = billing.TotalAmount,
+                    OrderStatus = billing.OrderStatus
                 });
             };
 
-            return View(billingVM);
+            return View(histories);
         }
 
         public IActionResult Error()

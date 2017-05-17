@@ -23,9 +23,15 @@ namespace ImpactWebsite.Models.BillingModels
         [Display(Name = "Module Name")]
         public string ModuleName { get; set; }
 
+        [Display(Name = "Module Names")]
+        public string ModuleNames { get; set; }
+
         [Display(Name = "Module Price")]
         public int UnitPrice { get; set; }
 
         public int TotalAmount { get; set; }
+
+        [Display(Name = "Order Status")]
+        public OrderStatusList OrderStatus { get; set; }
     }
 }
