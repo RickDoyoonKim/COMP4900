@@ -18,7 +18,6 @@ using ImpactWebsite.Models.OrderModels;
 
 namespace ImpactWebsite.Controllers
 {
-    [Authorize]
     public class BillingController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -39,6 +38,8 @@ namespace ImpactWebsite.Controllers
    
         public async Task<IActionResult> Index(string id, int orderId)
         {
+            ViewData["LoggedinUserId"] = id;
+            ViewData["LoggedinUserorder"] = orderId;
             ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
             var totalAmount = 0;
 
@@ -94,8 +95,8 @@ namespace ImpactWebsite.Controllers
                     totalAmount = billing.TotalAmount;
                 }
 
-                ViewData["amount"] = totalAmount;
-                ViewData["amountDisplay"] = totalAmount/100;
+                ViewData["amount"] = totalAmount * 100;
+                ViewData["amountDisplay"] = totalAmount;
                 ViewData["moduleCount"] = moduleCount;        
             }
 

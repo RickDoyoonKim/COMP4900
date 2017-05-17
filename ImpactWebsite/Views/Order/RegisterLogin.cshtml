@@ -3,11 +3,10 @@
     ViewData["Title"] = "RegisterLogin";
 }
 
-
 @if (ViewData["checkUser"].Equals("NeedRegister"))
 {
-    <p>Please Register to Request and Pay</p>
-    <div style="width: 250px; margin: auto; margin-top: 20%; text-align: center;">
+    <h3 style="padding: 30px; height: 100px; margin: auto; margin-top: 5%; align-self: center; text-align: center; background-color: cornflowerblue; color: aliceblue; width: 60%;">Please Register to Request and Pay</h3>
+    <div style="width: 250px; margin: auto; margin-top: 5%; text-align: center;">
         <a id="Register" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
             <i class="glyphicon glyphicon-align-center"></i> Register
         </a>
@@ -15,8 +14,8 @@
 }
 else if (ViewData["checkUser"].Equals("NeedLogin"))
 {
-    <p>Please Login to Request and Pay</p>
-    <div style="width: 250px; margin: auto; margin-top: 20%; text-align: center;">
+    <h3 style="padding: 30px; height: 100px; margin: auto; margin-top: 5%; align-self: center; text-align: center; background-color: cornflowerblue; color: aliceblue; width: 60%;">Please Login to Request and Pay</h3>
+    <div style="width: 250px; margin: auto; margin-top: 5%; text-align: center;">
         <a id="Login" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
             <i class="glyphicon glyphicon-align-center"></i> Login
         </a>
