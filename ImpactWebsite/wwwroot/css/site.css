@@ -61,5 +61,18 @@ textarea {
     font-weight: 900;
     margin-bottom: 100px;
 }
+.input-symbol-can {
+    position: relative;
+}
 
+.input-symbol-can input {
+    padding-left: 15px;
+}
+
+.input-symbol-can:before {
+    position: absolute;
+    top: -2px;
+    content: "$";
+    left: 5px;
+}
 
