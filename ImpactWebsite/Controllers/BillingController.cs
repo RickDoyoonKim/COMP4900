@@ -18,6 +18,7 @@ using ImpactWebsite.Models.OrderModels;
 
 namespace ImpactWebsite.Controllers
 {
+    [Authorize]
     public class BillingController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -38,8 +39,6 @@ namespace ImpactWebsite.Controllers
    
         public async Task<IActionResult> Index(string id, int orderId)
         {
-            ViewData["LoggedinUserId"] = id;
-            ViewData["LoggedinUserorder"] = orderId;
             ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
             var totalAmount = 0;
 
@@ -50,7 +49,7 @@ namespace ImpactWebsite.Controllers
             }
 
             if (id != null)
-            {            
+            {
                 List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
 
                 var billingDetails = (from u in _context.Users
@@ -59,7 +58,7 @@ namespace ImpactWebsite.Controllers
                                       join m in _context.Modules on ol.ModuleId equals m.ModuleId
                                       select new
                                       {
-                                          OrderHeaderId = oh.OrderHeaderId,
+                                          OrderNumber = oh.OrderNum,
                                           UserId = u.Id,
                                           UserEmail = u.Email,
                                           ModuleId = m.ModuleId,
@@ -68,13 +67,13 @@ namespace ImpactWebsite.Controllers
                                           TotalAmount = oh.TotalAmount
                                       }).ToList();
 
-                var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderHeaderId == orderId).ToList();
-
+                var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderNumber == orderId).ToList();
+                
                 foreach (var billing in temps)
                 {
                     billingVM.Add(new BillingDetailViewModel()
                     {
-                        OrderHeaderId = billing.OrderHeaderId,
+                        OrderHeaderId = billing.OrderNumber,
                         UserId = billing.UserId,
                         UserEmail = billing.UserEmail,
                         ModuleId = billing.ModuleId,
@@ -83,11 +82,10 @@ namespace ImpactWebsite.Controllers
                         TotalAmount = billing.TotalAmount
                     });
                 };
-
+                
                 ViewBag.PaymentDetails = billingVM;
 
                 var moduleCount = 0;
-
 
                 foreach (var billing in billingVM)
                 {

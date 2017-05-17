@@ -167,6 +167,7 @@ namespace ImpactWebsite.Controllers
             await _context.SaveChangesAsync();
 
             var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == _OrderNumber).Include(o => o.Module.UnitPrice);
+
             ViewData["orderNumber"] = _OrderNumber;
             return View(OrderLines.ToList());
         }
@@ -215,14 +216,12 @@ namespace ImpactWebsite.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult PartialModuleDetail(string id)
         {
             var DetailModules = _context.Modules.FirstOrDefault(m => m.ModuleId == Convert.ToInt32(id));
             return PartialView("_PartialModuleDetail", DetailModules);
         }
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> RegisterLogin(int id)
         {
             ViewData["orderNumber"] = _OrderNumber;
@@ -241,16 +240,21 @@ namespace ImpactWebsite.Controllers
         //
         // GET: /Account/_Register
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult PartialRegister(string returnUrl = null)
         {
             ViewData["email"] = _EmailAddress;
+            ViewData["orderNumber"] = _OrderNumber;
             ViewData["ReturnUrl"] = returnUrl;
-            return PartialView("_Register", new RegisterViewModel());
+            return View();
         }
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PartialRegister(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["email"] = _EmailAddress;
             ViewData["orderNumber"] = _OrderNumber;
             if (ModelState.IsValid)
             {
@@ -262,34 +266,40 @@ namespace ImpactWebsite.Controllers
                     _context.OrderHeaders.FirstOrDefault(o => o.OrderNum == _OrderNumber).UserId = user.Id;
                     await _context.SaveChangesAsync();
                     _logger.LogInformation(3, "User created a new account with password.");
+                    await _UserManager.AddToRoleAsync(user, "Member");
                     return RedirectToAction("NewOrder");
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
-            return RedirectToAction("NewOrder");
+            return View(model);
         }
 
         //
         // GET: /Account/Login
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> PartialLogin(string returnUrl = null)
         {
             ViewData["email"] = _EmailAddress;
+            ViewData["orderNumber"] = _OrderNumber;
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
-            return PartialView("_Login", new LoginViewModel());
+            return View();
         }
 
         //
         // POST: /Account/Login
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PartialLogin(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["email"] = _EmailAddress;
             ViewData["orderNumber"] = _OrderNumber;
             if (ModelState.IsValid)
             {
@@ -312,7 +322,8 @@ namespace ImpactWebsite.Controllers
                     return View(model);
                 }
             }
-            //return View(model);
+
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
         #region Helpers
