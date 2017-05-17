@@ -133,7 +133,7 @@ namespace ImpactWebsite.Controllers
                     DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = 1,
                     UserId = TempUser.Id,
-                    TotalAmount = totalAmount
+                    TotalAmount = totalAmount * 100
                 });
             }
             else
@@ -146,7 +146,7 @@ namespace ImpactWebsite.Controllers
                     DeliveredDate = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)),
                     OrderNum = _OrderNumber,
                     UserId = TempUser.Id,
-                    TotalAmount = totalAmount
+                    TotalAmount = totalAmount * 100
                 });
             }
 

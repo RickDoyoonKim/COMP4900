@@ -16,7 +16,6 @@ namespace ImpactWebsite.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        // Default value = subscribed
         [Required]
         public bool isSubscribed { get; set; } = true;
     }
