@@ -1,5 +1,5 @@
 
-# Imapact Website
+# Impact Website
 
 A web application using ASP.NET Core MVC
 

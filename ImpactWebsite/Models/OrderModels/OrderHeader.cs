@@ -17,6 +17,7 @@ namespace ImpactWebsite.Models.OrderModels
     public class OrderHeader
     {
         [Key]
+        [Display(Name = "Order Number")]
         public int OrderHeaderId { get; set; }
 
         public int OrderNum { get; set; }
@@ -25,15 +26,21 @@ namespace ImpactWebsite.Models.OrderModels
         [StringLength(160, MinimumLength = 2)]
         public string SalesRep { get; set; }
 
+        [Display(Name = "Ordered Date")]
         public DateTime OrderedDate{ get; set; }
+
+        [Display(Name = "Delivered Date")]
         public DateTime DeliveredDate { get; set; }
 
         // Uses list of order statuses
+        [Display(Name = "Order Status")]
         public OrderStatusList OrderStatus { get; set; }
 
+        [Display(Name = "Note")]
         public string NoteFromUser { get; set; }
         public string NoteFromAdmin { get; set; }
         [Required]
+        [Display(Name = "Email")]
         public string UserEmail { get; set; }
 
         public string UserId { get; set; }

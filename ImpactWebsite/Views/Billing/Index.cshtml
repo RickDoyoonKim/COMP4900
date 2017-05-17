@@ -10,32 +10,78 @@
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<h2>Billing Dashboard</h2>
+<h2><i class="fa fa-list"></i>  Billing Dashboard</h2>
+
 <hr />
 @Html.Partial("_PaymentDetails", (IEnumerable<BillingDetailViewModel>)ViewBag.PaymentDetails)
 <br />
-
-<h3>Stripe Pay</h3>
-
-<form action="/Billing/Charge" method="POST">
-    <article>
-        <label>Amount: $@ViewData["amountDisplay"]</label>
-    </article>
-    <script src="https://checkout.stripe.com/v2/checkout.js"
-            class="stripe-button"
-            data-image="/images/favicon.png"
-            data-key="@Stripe.Value.PublishableKey"
-            data-name="Impact Website"
-            data-locale="auto"
-            data-description="@ViewData["moduleCount"] Modules"
-            data-amount="@ViewData["amount"]"
-            data-currency="cad"
-            data-billing-address="false"
-            data-zip-code="false"
-            data-email="@ViewData["email"]">
-    </script>
-</form>
-
+<hr />
+<h3><i class="fa fa-credit-card"></i>   Payment</h3>
 <br />
+@if (@ViewData["amount"] != null && (int)@ViewData["amount"] != 0)
+{
+    var orderId = 0;
+    foreach (var a in Model) { orderId = a.OrderHeaderId; }
+
+    <form action="/Billing/Charge" method="post">
+
+        <article>
+            <label>Amount: $@ViewData["amountDisplay"]</label>
+        </article>
+
+        <input type="submit"
+               value="Pay with Card"
+               class="btn btn-primary"
+               data-key='@Stripe.Value.PublishableKey'
+               data-amount="@ViewData["amount"]"
+               data-currency="cad"
+               data-name="Impact Website"
+               data-description="@ViewData["moduleCount"] Module(s)"
+               data-email="@ViewData["email"]" 
+               data-billing-address="false"
+               data-zip-code="false"
+               data-locale="auto"
+               data-image="/images/favicon.png"
+               />
+
+        <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(':submit').on('click', function (event) {
+                    event.preventDefault();
+                    var $button = $(this),
+                        $form = $button.parents('form');
+                    var opts = $.extend({}, $button.data(), {
+                        token: function (result) {
+                            $form.append(
+                                $('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id }),
+                                $('<input>').attr({ type: 'hidden', name: 'stripeEmail', value: result.email }),
+                                $('<input>').attr({ type: 'hidden', name: 'orderId', value: @orderId }),
+                            ).submit();
+                        }
+                    });
+                    StripeCheckout.open(opts);
+                });
+            });
+        </script>
+    </form>
+
+
+}
+else if (@ViewData["amount"] != null && (int)@ViewData["amount"] == 0)
+{
+    var orderId = 0;
+    foreach (var a in Model) { orderId = a.OrderHeaderId; }
+    <a>@orderId</a>
+    <a class="btn btn-primary" href="@Url.Action("CompleteDefaultOrder", "Billing", new { orderId = @orderId})">
+        Complete Order
+    </a>
+}
+else
+{
+<p> No payment to make </p>
+}
+<hr/>
 @Html.Partial("_BillingAddress", (BillingAddress)ViewBag.BillingAddress)
 <br />
