@@ -105,7 +105,8 @@ namespace ImpactWebsite.Controllers
 
         public async Task<IActionResult> CompleteDefaultOrder(int orderId)
         {
-            var completedOrders = _context.OrderHeaders.Where(x => x.OrderHeaderId == orderId);
+            // Check orderNum
+            var completedOrders = _context.OrderHeaders.Where(x => x.OrderNum == orderId);
 
             foreach (var order in completedOrders)
             {
@@ -121,7 +122,9 @@ namespace ImpactWebsite.Controllers
         {
             var customers = new StripeCustomerService();
             var charges = new StripeChargeService();
-            var completedOrders = _context.OrderHeaders.Where(x => x.OrderHeaderId == orderId);
+
+            // check OrderNumber
+            var completedOrders = _context.OrderHeaders.Where(x => x.OrderNum == orderId);
 
             var customer = customers.Create(new StripeCustomerCreateOptions
             {
@@ -183,6 +186,24 @@ namespace ImpactWebsite.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        public IActionResult BillingAddress()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult BillingAddress(BillingAddress model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.GetUserId();
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
         }
 
     }

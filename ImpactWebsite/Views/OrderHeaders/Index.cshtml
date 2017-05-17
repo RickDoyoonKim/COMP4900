@@ -37,6 +37,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+    var totalAmountDollar = item.TotalAmount / 100;
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderNum)
@@ -57,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.UserEmail)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
+                $ @totalAmountDollar
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.OrderHeaderId">Edit</a> |

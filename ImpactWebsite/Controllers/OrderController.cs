@@ -33,6 +33,7 @@ namespace ImpactWebsite.Controllers
         private static string _TotalDay;
         private static int _OrderNumber;
         private readonly string _externalCookieScheme;
+        private int _dollarCent = 100;
 
         public OrderController(ApplicationDbContext context,
                                UserManager<ApplicationUser> UserManager,
@@ -91,6 +92,7 @@ namespace ImpactWebsite.Controllers
 
         {
             int totalAmount = 0;
+            int parsedAmount = 0;
 
             ApplicationUser user = await _UserManager.GetUserAsync(HttpContext.User);
             ApplicationUser TempUser;
@@ -122,7 +124,7 @@ namespace ImpactWebsite.Controllers
             ViewData["email"] = email;
             ViewData["LoggedinUserId"] = TempUser.Id;
 
-            totalAmount = int.Parse(_TotalAmount);
+            totalAmount = int.TryParse(_TotalAmount, out parsedAmount) ? parsedAmount : 0;
 
             if (!_context.OrderHeaders.Any())
             {
@@ -165,6 +167,21 @@ namespace ImpactWebsite.Controllers
                 });
             }
             await _context.SaveChangesAsync();
+
+            try
+            {
+                var newOrderHeader = _context.OrderHeaders.SingleOrDefault(x => x.OrderNum == _OrderNumber);
+                ViewData["OrderId"] = newOrderHeader.OrderHeaderId;
+
+                if (ViewData["OrderId"] == null)
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("ArgumentNullException source: {0}", e.Source);
+            }
 
             var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == _OrderNumber).Include(o => o.Module.UnitPrice);
 
