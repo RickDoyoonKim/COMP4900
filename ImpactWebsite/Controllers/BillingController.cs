@@ -49,7 +49,7 @@ namespace ImpactWebsite.Controllers
             }
 
             if (id != null)
-            {            
+            {
                 List<BillingDetailViewModel> billingVM = new List<BillingDetailViewModel>();
 
                 var billingDetails = (from u in _context.Users
@@ -58,7 +58,7 @@ namespace ImpactWebsite.Controllers
                                       join m in _context.Modules on ol.ModuleId equals m.ModuleId
                                       select new
                                       {
-                                          OrderHeaderId = oh.OrderHeaderId,
+                                          OrderNumber = oh.OrderNum,
                                           UserId = u.Id,
                                           UserEmail = u.Email,
                                           ModuleId = m.ModuleId,
@@ -67,13 +67,13 @@ namespace ImpactWebsite.Controllers
                                           TotalAmount = oh.TotalAmount
                                       }).ToList();
 
-                var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderHeaderId == orderId).ToList();
-
+                var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderNumber == orderId).ToList();
+                
                 foreach (var billing in temps)
                 {
                     billingVM.Add(new BillingDetailViewModel()
                     {
-                        OrderHeaderId = billing.OrderHeaderId,
+                        OrderHeaderId = billing.OrderNumber,
                         UserId = billing.UserId,
                         UserEmail = billing.UserEmail,
                         ModuleId = billing.ModuleId,
@@ -82,11 +82,10 @@ namespace ImpactWebsite.Controllers
                         TotalAmount = billing.TotalAmount
                     });
                 };
-
+                
                 ViewBag.PaymentDetails = billingVM;
 
                 var moduleCount = 0;
-
 
                 foreach (var billing in billingVM)
                 {
@@ -94,8 +93,8 @@ namespace ImpactWebsite.Controllers
                     totalAmount = billing.TotalAmount;
                 }
 
-                ViewData["amount"] = totalAmount;
-                ViewData["amountDisplay"] = totalAmount/100;
+                ViewData["amount"] = totalAmount * 100;
+                ViewData["amountDisplay"] = totalAmount;
                 ViewData["moduleCount"] = moduleCount;        
             }
 

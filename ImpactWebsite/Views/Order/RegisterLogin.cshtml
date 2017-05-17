@@ -3,34 +3,33 @@
     ViewData["Title"] = "RegisterLogin";
 }
 
-
 @if (ViewData["checkUser"].Equals("NeedRegister"))
 {
-    <p>Please Register to Request and Pay</p>
-    <div style="width: 250px; margin: auto; margin-top: 20%; text-align: center;">
-        <a id="Register" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
+    <h3 style="padding: 30px; height: 100px; margin: auto; margin-top: 5%; align-self: center; text-align: center; background-color: cornflowerblue; color: aliceblue; width: 60%;">Please Register to Request and Pay</h3>
+    <div style="width: 250px; margin: auto; margin-top: 5%; text-align: center;">
+        <a id="Register" asp-controller="Order" asp-action="PartialRegister" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
             <i class="glyphicon glyphicon-align-center"></i> Register
         </a>
     </div>
 }
 else if (ViewData["checkUser"].Equals("NeedLogin"))
 {
-    <p>Please Login to Request and Pay</p>
-    <div style="width: 250px; margin: auto; margin-top: 20%; text-align: center;">
-        <a id="Login" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
+    <h3 style="padding: 30px; height: 100px; margin: auto; margin-top: 5%; align-self: center; text-align: center; background-color: cornflowerblue; color: aliceblue; width: 60%;">Please Login to Request and Pay</h3>
+    <div style="width: 250px; margin: auto; margin-top: 5%; text-align: center;">
+        <a id="Login" asp-controller="Order" asp-action="PartialLogin" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
             <i class="glyphicon glyphicon-align-center"></i> Login
         </a>
     </div>
 }
-
-<div id="AddUserForm"></div>
 
 @section scripts
     {
     <script type="text/javascript" src="../../lib/jquery/dist/jquery.js"></script>
     <script src="../../lib/jquery-ui/jquery-ui.js"></script>
     <link rel="stylesheet" href="../../lib/jquery-ui/themes/base/jquery-ui.css" />
+}
 
+@*
     <script type="text/javascript">
         $('#Register').on('click', function () {
 
@@ -70,4 +69,4 @@ else if (ViewData["checkUser"].Equals("NeedLogin"))
     return false;
     });
     </script>
-}
+}*@
