@@ -6,9 +6,6 @@
 
 <h2>Index</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -37,9 +34,21 @@
                 @Html.DisplayFor(modelItem => item.ModifiedDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NewsLetterUserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NewsLetterUserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NewsLetterUserId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.NewsLetterUserId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                    </button>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.NewsLetterUserId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-tasks"></span> Details
+                    </button>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.NewsLetterUserId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span> Delete
+                    </button>
+                </a>
             </td>
         </tr>
 }

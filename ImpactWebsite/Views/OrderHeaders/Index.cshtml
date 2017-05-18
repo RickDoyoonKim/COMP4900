@@ -61,9 +61,21 @@
                 $ @totalAmountDollar
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderHeaderId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderHeaderId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderHeaderId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.OrderHeaderId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                    </button>
+                </a> 
+                <a asp-action="Details" asp-route-id="@item.OrderHeaderId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-tasks"></span> Details
+                    </button>
+                </a> 
+                <a asp-action="Delete" asp-route-id="@item.OrderHeaderId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span> Delete
+                    </button>
+                </a>
             </td>
         </tr>
 }
