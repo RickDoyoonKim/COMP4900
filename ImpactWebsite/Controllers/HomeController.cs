@@ -19,21 +19,29 @@ namespace ImpactWebsite.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewData["status"] = "get";
             NewsLetterUser nlUser = new NewsLetterUser();
             return View(nlUser);
         }
-        [HttpPost]
+
+        [HttpPost]        
         public async Task<IActionResult> Index(NewsLetterUser model)
         {
             if (ModelState.IsValid)
             {
+                if (_context.NewsLetterUsers.FirstOrDefault(a => a.Email == model.Email) != null)
+                {
+                    ModelState.AddModelError(string.Empty, "Email " + model.Email + " is already in use.");
+                    ViewData["status"] = "fail";
+                    return View(model);
+                }
                 model.ModifiedDate = DateTime.Now;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ViewData["status"] = "success";
+                return View(model);
             }
-
-            return View();
+            return View(model);
         }
 
         public IActionResult About()
@@ -49,7 +57,6 @@ namespace ImpactWebsite.Controllers
 
             return View();
         }
-
         public IActionResult Error()
         {
             return View();
