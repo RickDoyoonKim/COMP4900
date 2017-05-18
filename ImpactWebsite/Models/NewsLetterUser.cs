@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ImpactWebsite.Models
     {
         [Key]
         public Int64 NewsLetterUserId { get; set; }
-
+        
         [Required]
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
