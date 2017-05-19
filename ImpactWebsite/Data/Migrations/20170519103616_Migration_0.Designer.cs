@@ -9,8 +9,8 @@ using ImpactWebsite.Models.OrderModels;
 namespace ImpactWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170516182318_week4")]
-    partial class week4
+    [Migration("20170519103616_Migration_0")]
+    partial class Migration_0
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -216,7 +216,13 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<decimal>("DiscountRate");
 
+                    b.Property<bool>("IsActive");
+
                     b.Property<DateTime>("ModifiedDate");
+
+                    b.Property<string>("PromotionCode")
+                        .IsRequired()
+                        .HasMaxLength(8);
 
                     b.Property<string>("PromotionName")
                         .HasMaxLength(160);

@@ -215,7 +215,13 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.Property<decimal>("DiscountRate");
 
+                    b.Property<bool>("IsActive");
+
                     b.Property<DateTime>("ModifiedDate");
+
+                    b.Property<string>("PromotionCode")
+                        .IsRequired()
+                        .HasMaxLength(8);
 
                     b.Property<string>("PromotionName")
                         .HasMaxLength(160);
