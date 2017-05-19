@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ImpactWebsite.Data.Migrations
 {
-    public partial class week4 : Migration
+    public partial class Migration_0 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,7 +81,9 @@ namespace ImpactWebsite.Data.Migrations
                     DateTo = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     DiscountRate = table.Column<decimal>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     ModifiedDate = table.Column<DateTime>(nullable: false),
+                    PromotionCode = table.Column<string>(maxLength: 8, nullable: false),
                     PromotionName = table.Column<string>(maxLength: 160, nullable: true)
                 },
                 constraints: table =>

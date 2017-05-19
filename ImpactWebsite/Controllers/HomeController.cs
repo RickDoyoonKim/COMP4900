@@ -29,9 +29,9 @@ namespace ImpactWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_context.NewsLetterUsers.FirstOrDefault(a => a.Email == model.Email) != null)
+                if (_context.NewsLetterUsers.Any(a => a.Email == model.Email))
                 {
-                    ModelState.AddModelError(string.Empty, "Email " + model.Email + " is already in use.");
+                    ModelState.AddModelError("Email", "Email " + model.Email + " is already in use.");
                     ViewData["status"] = "fail";
                     return View(model);
                 }

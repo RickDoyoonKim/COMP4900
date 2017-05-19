@@ -34,6 +34,7 @@ namespace ImpactWebsite.Controllers
         private static int _OrderNumber;
         private readonly string _externalCookieScheme;
         private int _dollarCent = 100;
+        private static double _DiscountRate;
 
         public OrderController(ApplicationDbContext context,
                                UserManager<ApplicationUser> UserManager,
@@ -52,7 +53,8 @@ namespace ImpactWebsite.Controllers
         public async Task<IActionResult> Index(string message)
         {
             ApplicationUser user = await _UserManager.GetUserAsync(HttpContext.User);
-            @ViewData["error"] = message;
+            ViewData["error"] = message;
+            _DiscountRate = 0;
             if (_SignInManager.IsSignedIn(User))
             {
                 _EmailAddress = await _UserManager.GetEmailAsync(user);
@@ -82,7 +84,7 @@ namespace ImpactWebsite.Controllers
             ViewData["TotalAmount"] = _TotalAmount;
             ViewData["LoggedinUserId"] = _context.OrderHeaders.FirstOrDefault(o => o.OrderNum == _OrderNumber).UserId;
             ViewData["orderNumber"] = _OrderNumber;
-
+            ViewData["DiscountRate"] = _DiscountRate;
             var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == _OrderNumber).Include(o => o.Module.UnitPrice);
             return View(OrderLines.ToList());
         }
@@ -93,7 +95,6 @@ namespace ImpactWebsite.Controllers
         {
             int totalAmount = 0;
             int parsedAmount = 0;
-
             ApplicationUser user = await _UserManager.GetUserAsync(HttpContext.User);
             ApplicationUser TempUser;
             _TotalAmount = totalPrice;
@@ -101,7 +102,8 @@ namespace ImpactWebsite.Controllers
             ViewData["DeliverDate"] = DateTime.Now.AddDays(Convert.ToDouble(_TotalDay)).ToString("MMM dd yyyy");
             ViewData["TotalDay"] = totalDay;
             ViewData["TotalAmount"] = totalPrice;
-            
+            ViewData["DiscountRate"] = _DiscountRate;
+
             if (_SignInManager.IsSignedIn(User))
             {
                 TempUser = user;
@@ -188,6 +190,37 @@ namespace ImpactWebsite.Controllers
             ViewData["orderNumber"] = _OrderNumber;
             return View(OrderLines.ToList());
         }
+
+        [HttpGet]
+        public IActionResult SubmitPromoCode()
+        {
+            Promotion promotion = new Promotion();
+            return PartialView(promotion);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitPromoCode(Promotion model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _context.Promotions.FirstOrDefault(p => p.PromotionCode.Equals(model.PromotionCode));
+                if (result != null && result.DateFrom <= DateTime.Now && result.DateTo >= DateTime.Now && result.IsActive)
+                {
+                    _DiscountRate = (double)result.DiscountRate;
+                    var tmpAmount = _context.OrderHeaders.FirstOrDefault(o => o.OrderNum == _OrderNumber).TotalAmount;
+                    var discoutRate = result.DiscountRate * 100;
+                    tmpAmount = tmpAmount - (tmpAmount * (int)discoutRate/100);
+                    _context.OrderHeaders.FirstOrDefault(o => o.OrderNum == _OrderNumber).TotalAmount = tmpAmount;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult FileUpdaload()
         {
@@ -221,7 +254,7 @@ namespace ImpactWebsite.Controllers
             }
             var OrderLines = _context.OrderLines.Where(o => o.OrderHeader.OrderNum == _OrderNumber).Include(o => o.Module.UnitPrice);
             ViewData["orderNumber"] = _OrderNumber;
-            return View("NewOrderPayOnly", OrderLines.ToList());
+            return RedirectToAction("NewOrder");
         }
 
         [HttpGet]

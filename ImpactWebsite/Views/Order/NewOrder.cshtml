@@ -25,11 +25,18 @@
                 </tr>
             }
             <tr>
-                <td style="font-size: medium; font-weight: bold;">Estimate Deliver Date: @ViewData["DeliverDate"]</td>
-                <td style="font-size: medium; font-weight: bold;">$@ViewData["TotalAmount"]</td>
+                <td style="font-size: small; font-weight: bold;">Estimate Deliver Date: @ViewData["DeliverDate"]</td>
+                <td style="font-size: small; font-weight: bold;">$@ViewData["TotalAmount"]</td>
+            </tr>
+            <tr>
+                <td style="font-size: 1em; font-weight: bold;" align="right">Grand Total: </td>
+                <td><label style="font-size: 1em; font-weight: bold;" for="grandTotal"></label>
+                    <label style="color: red; font-size: 0.9em; font-weight: bold;" for="discountDisplay"></label>
+                </td>
             </tr>
         </tbody>
     </table>
+    <a id="promoCode" asp-controller="Order" asp-action="SubmitPromoCode" style="margin-left: 70%;">Please Enter a Promotion Code</a>
 
 <section style="width: 70%; margin-top: 100px; margin-left: 20%;">
     <div style="width: 250px; float: left; text-align: center;">
@@ -58,8 +65,8 @@
 
 @section scripts
     {
-    <script type="text/javascript" src="../lib/jquery/dist/jquery.js"></script>
-    <script src="../lib/jquery-ui/jquery-ui.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
     <link rel="stylesheet" href="../lib/jquery-ui/themes/base/jquery-ui.css" />
 
     <script type="text/javascript">
@@ -81,4 +88,35 @@
         return false;
     });
     </script>
+
+    <script type="text/javascript">
+        var idNum;
+        $(document).ready(function () {
+            var discountRate = @ViewData["DiscountRate"];
+            var amount = @ViewData["TotalAmount"];
+            var result = amount - (discountRate * amount);
+            $('label[for="grandTotal"]').text('$' + result);
+            if (discountRate > 0) {
+                $('label[for="discountDisplay"]').text('(' + (discountRate * 100).toFixed(2) + '% off)');
+            }
+        });
+</script>
+<script type="text/javascript">
+        $('#promoCode').on('click', function () {
+            $("#AddUserForm").dialog({
+            type: 'GET',
+            autoOpen: true,
+            position: { my: "top", at: "top+150", of: window },
+            width: 400,
+            height: 150,
+            resizable: true,
+            title: 'Please Input Promotion Code',
+            modal: true,
+            open: function () {
+                $(this).load('@Url.Action("SubmitPromoCode", "Order")');
+            },
+        });
+        return false;
+        });
+</script>
     }
