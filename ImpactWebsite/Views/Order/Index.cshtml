@@ -11,11 +11,11 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-    <h2>Select Modules</h2>
+    <h2><i class="fa fa-check-square-o"></i>  Select Modules</h2>
 
 <form action="/Order/NewOrder" method="post">
     
-    <label style="color: brown;">* Email Address: </label>
+    <label style="color: brown; margin:15px;">* Email Address: </label>
     @if (SignInManager.IsSignedIn(User))
     {
         <input type="email" required="required" name="email" value="@ViewData["email"]" />
@@ -86,7 +86,7 @@
     </table>
     <div class="form-group">
         <div>
-            <input type="submit" class="btn btn-primary" value="Next >>"  />
+            <input type="submit" class="impact-btn" value="Next >>"  />
         </div>
     </div>
 </form>

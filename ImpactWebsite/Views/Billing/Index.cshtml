@@ -7,7 +7,7 @@
 
 @{
     ViewData["Title"] = "Billing";
-    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2><i class="fa fa-list"></i>  Billing Dashboard</h2>
@@ -31,7 +31,7 @@
 
         <input type="submit"
                value="Pay with Card"
-               class="btn btn-primary"
+               class="impact-btn"
                data-key='@Stripe.Value.PublishableKey'
                data-amount="@ViewData["amount"]"
                data-currency="cad"
@@ -43,6 +43,8 @@
                data-locale="auto"
                data-image="/images/favicon.png"
                />
+
+        <a href="javascript:history.back()" class="impact-btn">Cancel Payment</a>
 
         <script src="https://checkout.stripe.com/v2/checkout.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
@@ -73,14 +75,14 @@ else if (@ViewData["amount"] != null && (int)@ViewData["amount"] == 0)
 {
     var orderId = 0;
     foreach (var a in Model) { orderId = a.OrderHeaderId; }
-    <a>@orderId</a>
-    <a class="btn btn-primary" href="@Url.Action("CompleteDefaultOrder", "Billing", new { orderId = @orderId})">
+    <a class="impact-btn" href="@Url.Action("CompleteDefaultOrder", "Billing", new { orderId = @orderId})">
         Complete Order
     </a>
 }
 else
 {
 <p> No payment to make </p>
+    <br/>
 }
 <hr/>
 @Html.Partial("_BillingAddress", (BillingAddress)ViewBag.BillingAddress)

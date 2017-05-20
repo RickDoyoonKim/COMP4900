@@ -8,8 +8,8 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-    <table class="table table-bordered table-responsive table-hover" style="margin-top: 50px;">
-        <caption style="text-align: center; font-size: large; font-weight:bold;">Order Number: @ViewData["orderNumber"]</caption>
+    <table class="table table-bordered table-responsive table-hover" style="margin: 50px auto auto auto; max-width:800px;">
+        <caption style="text-align: center; font-size: large; font-weight:bold; margin-bottom: 20px;">Order Number: @ViewData["orderNumber"]</caption>
         <thead>
             <tr>
                 <th>Module Name</th>
@@ -36,29 +36,31 @@
             </tr>
         </tbody>
     </table>
-    <a id="promoCode" asp-controller="Order" asp-action="SubmitPromoCode" style="margin-left: 70%;">Please Enter a Promotion Code</a>
+<br />
+    <a id="promoCode" asp-controller="Order" asp-action="SubmitPromoCode" style="margin-left: 38%;" class="impact-btn">
+    <i class="fa fa-barcode" aria-hidden="true"></i>&nbsp;&nbsp;Please Enter a Promotion Code</a>
 
 <section style="width: 70%; margin-top: 100px; margin-left: 20%;">
     <div style="width: 250px; float: left; text-align: center;">
-        <a id="FileUpload" style="display:block; width:250px; height:100px; padding: 30px;" class="btn-lg btn-primary">
-            <i class="glyphicon glyphicon-align-center"></i>Input Investment Information
+        <a id="FileUpload" style="width:200px; height:40px; padding: 30px;" class="impact-btn neworder-btn">
+            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;Input Investment Information
         </a>
     </div>
     <div style="width: 250px; margin-left: 50%; text-align: center;">
         @if (SignInManager.IsSignedIn(User))
         {
-            <a href="@Url.Action("Index", "Billing", new { @id = ViewData["LoggedinUserId"], @orderId = ViewData["orderNumber"] })" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">    
-                <i class="glyphicon glyphicon-align-center"></i> Request & Payment
+            <a href="@Url.Action("Index", "Billing", new { @id = ViewData["LoggedinUserId"], @orderId = ViewData["orderNumber"] })"  class="impact-btn neworder-btn">    
+                <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;Request & Payment
             </a>
         }
         else
         {
-            <a id="Charge" asp-controller="Order" asp-action="RegisterLogin" asp-route-id="@ViewData["orderNumber"]" style="display: block; width: 250px; height: 100px; padding: 30px;" class="btn-lg btn-primary">
-                <i class="glyphicon glyphicon-align-center"></i> Request & Payment
+            <a id="Charge" asp-controller="Order" asp-action="RegisterLogin" asp-route-id="@ViewData["orderNumber"]"  class="impact-btn neworder-btn">
+                <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;Request & Payment
             </a>
         }
     </div>
-
+    <br/>
 </section>
 
 <div id="AddUserForm"></div>
