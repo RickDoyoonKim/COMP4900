@@ -9,28 +9,25 @@ namespace ImpactWebsite.Models.BillingModels
     public class BillingAddress
     {
 
-        [Display(Name = "BillingAddress AddressLine1 Address 1")]
+        [Display(Name = "Address 1")]
         public string AddressLine1 { get; set; }
 
-        [Display(Name = "BillingAddress AddressLine2 Address 2")]
+        [Display(Name = "Address 2")]
         public string AddressLine2 { get; set; }
 
-        [Display(Name = "BillingAddress City City")]
+        [Display(Name = "City")]
         public string City { get; set; }
 
-        [Display(Name = "BillingAddress Country Country")]
+        [Display(Name = "Country")]
         public string Country { get; set; }
 
-        [Display(Name = "BillingAddress Name Name")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Display(Name = "BillingAddress State State")]
+        [Display(Name = "State")]
         public string State { get; set; }
 
-        [Display(Name = "BillingAddress Vat VAT Number")]
-        public string Vat { get; set; }
-
-        [Display(Name = "BillingAddress ZipCode Zip Code")]
+        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
     }
 }

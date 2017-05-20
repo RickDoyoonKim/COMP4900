@@ -5,19 +5,22 @@
 
 @if (ViewData["checkUser"].Equals("NeedRegister"))
 {
-    <h3 style="padding: 30px; height: 100px; margin: auto; margin-top: 5%; align-self: center; text-align: center; background-color: cornflowerblue; color: aliceblue; width: 60%;">Please Register to Request and Pay</h3>
+    <h3 class="header__slider--text" style="margin-top:20px; text-align:center">
+        <i class="fa fa-exclamation" aria-hidden="true"></i>&nbsp;&nbsp;Please register to request and pay</h3>
     <div style="width: 250px; margin: auto; margin-top: 5%; text-align: center;">
-        <a id="Register" asp-controller="Order" asp-action="PartialRegister" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
-            <i class="glyphicon glyphicon-align-center"></i> Register
+        <a id="Register" asp-controller="Order" asp-action="PartialRegister" style="display: block; width: 150px;" class="impact-btn neworder-btn">
+            <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Register
         </a>
     </div>
 }
 else if (ViewData["checkUser"].Equals("NeedLogin"))
 {
-    <h3 style="padding: 30px; height: 100px; margin: auto; margin-top: 5%; align-self: center; text-align: center; background-color: cornflowerblue; color: aliceblue; width: 60%;">Please Login to Request and Pay</h3>
+    <h3 class="header__slider--text" style="margin-top:20px; text-align:center">
+        <i class="fa fa-exclamation" aria-hidden="true"></i>
+        &nbsp;&nbsp;Please login to request and pay</h3>
     <div style="width: 250px; margin: auto; margin-top: 5%; text-align: center;">
-        <a id="Login" asp-controller="Order" asp-action="PartialLogin" style="display: block; width: 150px; height: 80px; padding: 30px;" class="btn-lg btn-primary">
-            <i class="glyphicon glyphicon-align-center"></i> Login
+        <a id="Login" asp-controller="Order" asp-action="PartialLogin" style="display: block; width: 150px; " class="impact-btn neworder-btn">
+            <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Login
         </a>
     </div>
 }
