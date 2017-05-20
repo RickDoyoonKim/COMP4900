@@ -4,12 +4,11 @@
     ViewData["Title"] = "PaymentDetails";
 }
 
+
 <h3><i class="fa fa-check-square-o"></i>  Selected Modules</h3>
 <br />
 @if (Model != null)
 {
-    const string strSpacer = "&nbsp;&nbsp;";
-
     <table class="table">
         <tr>
             <th>
@@ -56,7 +55,6 @@
             </tr>
         }
     </table>
-    <br />
 }
 else
 {

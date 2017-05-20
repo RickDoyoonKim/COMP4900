@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using ImpactWebsite.Data;
 using ImpactWebsite.Models.OrderModels;
 
-namespace ImpactWebsite.Data.Migrations
+namespace ImpactWebsite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -23,6 +23,8 @@ namespace ImpactWebsite.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
+
+                    b.Property<int?>("BillingAddressId");
 
                     b.Property<string>("CompanyName")
                         .HasMaxLength(160);
@@ -72,6 +74,8 @@ namespace ImpactWebsite.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BillingAddressId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -80,6 +84,32 @@ namespace ImpactWebsite.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ImpactWebsite.Models.BillingModels.BillingAddress", b =>
+                {
+                    b.Property<int>("BillingAddressId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AddressLine1");
+
+                    b.Property<string>("AddressLine2");
+
+                    b.Property<string>("BillingName");
+
+                    b.Property<string>("City");
+
+                    b.Property<string>("Country");
+
+                    b.Property<string>("State");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("ZipCode");
+
+                    b.HasKey("BillingAddressId");
+
+                    b.ToTable("BillingAddress");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.Investment", b =>
@@ -352,6 +382,13 @@ namespace ImpactWebsite.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("IdentityUserToken<string>");
+                });
+
+            modelBuilder.Entity("ImpactWebsite.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("ImpactWebsite.Models.BillingModels.BillingAddress", "BillingAddress")
+                        .WithMany()
+                        .HasForeignKey("BillingAddressId");
                 });
 
             modelBuilder.Entity("ImpactWebsite.Models.OrderModels.OrderHeader", b =>

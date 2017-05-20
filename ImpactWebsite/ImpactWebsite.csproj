@@ -11,10 +11,6 @@
   <PropertyGroup>
     <UserSecretsId>aspnet-ImpactWebsite-7da2974d-6e31-4e80-a5b3-fa9e1024b495</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="wwwroot\css\billing.css" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
@@ -39,8 +35,6 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
-    <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

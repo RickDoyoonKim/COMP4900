@@ -15,6 +15,7 @@ using ImpactWebsite.Models;
 using Microsoft.AspNetCore.Authorization;
 using ImpactWebsite.Data;
 using ImpactWebsite.Models.OrderModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace ImpactWebsite.Controllers
 {
@@ -51,8 +52,7 @@ namespace ImpactWebsite.Controllers
             }
 
             if (id != null)
-            {            
-
+            {
                 var billingDetails = (from u in _context.Users
                                       join oh in _context.OrderHeaders on u.Id equals oh.UserId
                                       join ol in _context.OrderLines on oh.OrderHeaderId equals ol.OrderHeaderId
@@ -66,11 +66,11 @@ namespace ImpactWebsite.Controllers
                                           ModuleName = m.ModuleName,
                                           UnitPrice = m.UnitPrice.Price,
                                           TotalAmount = oh.TotalAmount,
-                                          OrderStatus = oh.OrderStatus
+                                          OrderStatus = oh.OrderStatus,
                                       }).ToList();
 
                 var temps = billingDetails.Where(x => x.UserId == id).Where(y => y.OrderNumber == orderId).ToList();
-                
+
                 foreach (var billing in temps)
                 {
                     billingVM.Add(new BillingDetailViewModel()
@@ -85,21 +85,28 @@ namespace ImpactWebsite.Controllers
                         OrderStatus = billing.OrderStatus
                     });
                 };
-                
-                ViewBag.PaymentDetails = billingVM;
+
                 foreach (var billing in billingVM)
                 {
                     moduleCount += 1;
-                    totalAmount = billing.TotalAmount;                    
+                    totalAmount = billing.TotalAmount;
                 }
 
+                ViewBag.PaymentDetails = billingVM;
+
                 ViewData["amount"] = totalAmount;
-                ViewData["amountDisplay"] = totalAmount/100;
+                ViewData["amountDisplay"] = totalAmount / 100;
                 ViewData["moduleCount"] = moduleCount;
                 ViewData["orderId"] = orderId;
             }
 
+            var userId = await _userManager.GetUserIdAsync(user);
+            var billingAddress = await _context.BillingAddresses.LastOrDefaultAsync(x => x.UserId == userId);
+
+            ViewData["billingAddressId"] = (billingAddress != null) ? (int)billingAddress.BillingAddressId : -1;
+            ViewBag.BillingAddress = billingAddress;
             _amountInt = totalAmount;
+
             return View(billingVM);
         }
 
@@ -118,7 +125,12 @@ namespace ImpactWebsite.Controllers
             return View(completedOrders);
         }
 
-        public async Task<IActionResult> Charge(string stripeEmail, string stripeToken, int orderId)
+        public async Task<IActionResult> Charge(
+            string stripeEmail
+            ,string stripeToken
+            ,int orderId
+            ,int bAddressId
+            )
         {
             var customers = new StripeCustomerService();
             var charges = new StripeChargeService();
@@ -129,16 +141,28 @@ namespace ImpactWebsite.Controllers
             var customer = customers.Create(new StripeCustomerCreateOptions
             {
                 Email = stripeEmail,
-                SourceToken = stripeToken
+                SourceToken = stripeToken,                
             });
 
-           var charge = charges.Create(new StripeChargeCreateOptions
+            var billingAddress = await _context.BillingAddresses.LastOrDefaultAsync(x=>x.BillingAddressId == bAddressId);
+
+            var charge = charges.Create(new StripeChargeCreateOptions
             {
                 Amount = _amountInt,
                 Description = "Module Charge",
                 Currency = "cad",
-                CustomerId = customer.Id
+                CustomerId = customer.Id,
             });
+
+            StripeAddress stripeAddress = new StripeAddress()
+            {
+                Line1 = billingAddress.AddressLine1,
+                Line2 = billingAddress.AddressLine2,
+                CityOrTown = billingAddress.City,
+                State = billingAddress.State,
+                PostalCode = billingAddress.ZipCode,
+                Country = billingAddress.Country
+            };
 
             foreach (var order in completedOrders) { order.OrderStatus = OrderStatusList.Completed; }
 
@@ -147,40 +171,29 @@ namespace ImpactWebsite.Controllers
             return View(completedOrders);
         }
 
-        public IActionResult PaymentHistory()
+        public async Task<IActionResult> PaymentHistory()
         {
-            List<BillingDetailViewModel> histories = new List<BillingDetailViewModel>();
-            string moduleNames = "";
+            ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
+            var userId = user.Id;
 
-            var billingDetails = (from u in _context.Users
-                                  join oh in _context.OrderHeaders on u.Id equals oh.UserId
-                                  join ol in _context.OrderLines on oh.OrderHeaderId equals ol.OrderHeaderId
-                                  join m in _context.Modules on ol.ModuleId equals m.ModuleId
-                                  select new
-                                  {
-                                      OrderHeaderId = oh.OrderHeaderId,
-                                      ModuleId = m.ModuleId,
-                                      ModuleName = m.ModuleName,
-                                      UnitPrice = m.UnitPrice,
-                                      TotalAmount = oh.TotalAmount,
-                                      OrderStatus = oh.OrderStatus
-                                  }).ToList();
-       
+            return View(await _context.OrderHeaders.Where(m => m.UserId == userId).ToListAsync());
+        }
 
-            foreach (var billing in billingDetails)
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
             {
-                histories.Add(new BillingDetailViewModel()
-                {                    
-                    OrderHeaderId = billing.OrderHeaderId,
-                    ModuleNames = moduleNames,
-                    ModuleName = billing.ModuleName,
-                    UnitPrice = billing.UnitPrice.Price,
-                    TotalAmount = billing.TotalAmount,
-                    OrderStatus = billing.OrderStatus
-                });
-            };
+                return NotFound();
+            }
 
-            return View(histories);
+            var orderlines = await _context.OrderLines.Where(m => m.OrderHeaderId == id).ToListAsync();
+    
+            if (orderlines == null)
+            {
+                return NotFound();
+            }
+
+            return View(orderlines);
         }
 
         public IActionResult Error()
@@ -188,22 +201,43 @@ namespace ImpactWebsite.Controllers
             return View();
         }
 
-        public IActionResult BillingAddress()
+        public async Task<IActionResult> BillingAddress()
         {
+            var userId = User.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            var billingAddress = await _context.BillingAddresses.LastOrDefaultAsync(w => w.UserId == userId);
 
-            return View();
+            return View(billingAddress);
         }
 
         [HttpPost]
-        public IActionResult BillingAddress(BillingAddress model)
+        public async Task<IActionResult> BillingAddress(BillingAddress billingAddress)
         {
             if (ModelState.IsValid)
             {
                 var userId = User.GetUserId();
+                var user = await _userManager.FindByIdAsync(userId);
+                var currentBillingAddresses = _context.BillingAddresses
+                    .Where(x => x.UserId == userId).ToList();
+
+                if (currentBillingAddresses.Any())
+                {
+                    foreach (var address in currentBillingAddresses)
+                    {
+                        _context.BillingAddresses.Remove(address);
+                    }
+
+                   await _context.SaveChangesAsync();
+                }
+
+                billingAddress.UserId = userId;
+                user.BillingAddress = billingAddress;                
+                await _userManager.UpdateAsync(user);
+
                 return RedirectToAction("Index");
             }
 
-            return View(model);
+            return View(billingAddress);
         }
 
     }

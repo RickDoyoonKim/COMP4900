@@ -33,5 +33,8 @@ namespace ImpactWebsite.Models.BillingModels
 
         [Display(Name = "Order Status")]
         public OrderStatusList OrderStatus { get; set; }
+
+        [Display(Name = "Billing Address Number")]
+        public Int32 BillingAddressId { get; set; }
     }
 }
