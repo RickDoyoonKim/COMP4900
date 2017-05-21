@@ -57,7 +57,7 @@
                         <li><a asp-area="" asp-controller="NewsLetterUsers" asp-action="Index">NewsLetterUser</a></li>
                         <li><a asp-area="" asp-controller="Promotions" asp-action="Index">Promotion</a></li>
                     }
-                    else if (User.IsInRole("Member"))
+                    else if (User.Identity.IsAuthenticated)
                     {
                         <li>
                             <a asp-area="" asp-controller="Billing" asp-action="Index">Billing Dashboard</a>

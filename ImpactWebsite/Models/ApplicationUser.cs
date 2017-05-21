@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using ImpactWebsite.Models.OrderModels;
+using ImpactWebsite.Models.BillingModels;
 
 namespace ImpactWebsite.Models
 {
@@ -25,5 +26,7 @@ namespace ImpactWebsite.Models
         public bool NewsletterRequired { get; set; }
         public bool IsTempUser { get; set; }
         public List<OrderHeader> Orders { get; set; }
+
+        public BillingAddress BillingAddress { get; set; }
     }
 }

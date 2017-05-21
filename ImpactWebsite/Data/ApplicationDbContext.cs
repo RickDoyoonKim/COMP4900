@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ImpactWebsite.Models;
 using ImpactWebsite.Models.OrderModels;
+using ImpactWebsite.Models.BillingModels;
 
 namespace ImpactWebsite.Data
 {
@@ -31,5 +32,6 @@ namespace ImpactWebsite.Data
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<ImpactWebsite.Models.ApplicationUser> ApplicationUser { get; set; }
 
+        public DbSet<BillingAddress> BillingAddresses { get; set; }        
     }
 }
