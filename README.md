@@ -3,7 +3,7 @@
 
 A web application using ASP.NET Core MVC
 
-Website: 
+Website: http://impactwebsite.azurewebsites.net/
 
 ## Project members
 
@@ -33,16 +33,6 @@ Website:
 ### Scrum (Agile Methodology)
 
 - 1 Week Iteration 
-
-
-
-
-### Screenshots 
-
-
-
-
-### Class Diagram
 
 
 

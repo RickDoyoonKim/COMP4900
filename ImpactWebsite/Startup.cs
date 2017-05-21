@@ -43,6 +43,10 @@ namespace ImpactWebsite
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Use In Memory Database for unit testing
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseInMemoryDatabase());
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -53,7 +57,7 @@ namespace ImpactWebsite
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +95,5 @@ namespace ImpactWebsite
             ModuleSeedData.Initialize(context);
             RoleSeedData.Initialize(app.ApplicationServices);
         }
-
     }
 }
