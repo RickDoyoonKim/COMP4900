@@ -7,7 +7,11 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span> Create
+        </button>
+    </a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +53,16 @@
                 @Html.DisplayFor(modelItem => item.UnitPrice.UnitPriceId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ModuleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ModuleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ModuleId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ModuleId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                    </button>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.ModuleId">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span> Delete
+                    </button>
+                </a>
             </td>
         </tr>
 }
