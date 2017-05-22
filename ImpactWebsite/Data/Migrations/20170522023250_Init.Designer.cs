@@ -9,13 +9,13 @@ using ImpactWebsite.Models.OrderModels;
 namespace ImpactWebsite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170520201319_Migration0")]
-    partial class Migration0
+    [Migration("20170522023250_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.1")
+                .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ImpactWebsite.Models.ApplicationUser", b =>
