@@ -27,6 +27,7 @@ namespace ImpactWebsite.Controllers
         private readonly ApplicationDbContext _context;
         private static int _amountInt;
         private static string _emailAddress;
+        private int _dollarCent = 100;
 
         public BillingController(
             ApplicationDbContext context,
@@ -95,7 +96,7 @@ namespace ImpactWebsite.Controllers
                 ViewBag.PaymentDetails = billingVM;
 
                 ViewData["amount"] = totalAmount;
-                ViewData["amountDisplay"] = totalAmount / 100;
+                ViewData["amountDisplay"] = totalAmount / _dollarCent;
                 ViewData["moduleCount"] = moduleCount;
                 ViewData["orderId"] = orderId;
             }
