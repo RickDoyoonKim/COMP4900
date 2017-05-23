@@ -12,22 +12,23 @@
                     Start Analysis
                     <div class="arrow-left"></div>
                     <div class="arrow-right"></div>
-                </a>                 
-             <table class="newsletter-table">
-                 <tr>
-                     <td><label asp-for="Email"><h2 class="header__slider--subtitle">Subscribe our news letter :</h2></label></td>
-                     <td><input id="email" asp-for="Email" class="form-control newsletter-input" /></td>
-                     <td>
-                         <input type="submit" value="Request" class="impact-btn newsletter-btn" />
-                     </td>
-                 </tr>
-                 <tr>
-                     <td colspan="3">
-                         <strong><span asp-validation-for="Email" class="text-danger"></span></strong>
-                     </td>
-                 </tr>
-             
-             </table>
+                </a>          
+            
+            <h2 class="newsletter-text">Subscribe our news letter :</h2>
+            <table class="newsletter-table">
+                <tr>
+                    <td><input id="email" asp-for="Email" class="form-control newsletter-input" /></td>
+                    <td>
+                        <input type="submit" value="Request" class="impact-btn newsletter-btn" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <strong><span asp-validation-for="Email" class="text-danger"></span></strong>
+                    </td>
+                </tr>
+
+            </table>
         </div>
 
 </form>
