@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImpactWebsite.Common
 {
+    // Get user id easily without going though Claims
     public static class ClaimsPrinciapalExtensions
     {
         public static string GetUserId(this ClaimsPrincipal principal)

@@ -43,7 +43,7 @@ namespace ImpactWebsite
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            // Use In Memory Database for unit testing
+            // Use in memory database for unit testing
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase());
 
@@ -90,6 +90,7 @@ namespace ImpactWebsite
                     template: "{controller=Home}/{action=Index}/{id?}/{*more}");
             });
 
+            // Set stripe key to Stripe config so that it can be called.
             StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
             ModuleSeedData.Initialize(context);
