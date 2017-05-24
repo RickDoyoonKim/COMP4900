@@ -27,6 +27,7 @@ namespace ImpactWebsite.Controllers
         private readonly ApplicationDbContext _context;
         private static int _amountInt;
         private static string _emailAddress;
+        // To be able to sent total amount to Stripe API, makes cent digits to 100
         private int _dollarCent = 100;
 
         public BillingController(
@@ -39,6 +40,14 @@ namespace ImpactWebsite.Controllers
             _signInManager = signInManager;
         }
    
+        /// <summary>
+        /// Return billing page with a data that contains information with order and module.
+        /// Only displays the specific order of the logged in user.
+        /// Billing address will be displayed in any circumstances.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Index(string id, int orderId)
         {
             ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
@@ -111,6 +120,12 @@ namespace ImpactWebsite.Controllers
             return View(billingVM);
         }
 
+        /// <summary>
+        /// Get order when a user select the default module.
+        /// Since the default module is free of charge, no need to go through payment process.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> CompleteDefaultOrder(int orderId)
         {
             // Check orderNum
@@ -126,6 +141,16 @@ namespace ImpactWebsite.Controllers
             return View(completedOrders);
         }
 
+        /// <summary>
+        /// Execute Stripe API.  
+        /// Create customer and charge tokens for request.
+        /// After successful payment, the order's status set to completed.
+        /// </summary>
+        /// <param name="stripeEmail"></param>
+        /// <param name="stripeToken"></param>
+        /// <param name="orderId"></param>
+        /// <param name="bAddressId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Charge(
             string stripeEmail
             ,string stripeToken
@@ -172,6 +197,13 @@ namespace ImpactWebsite.Controllers
             return View(completedOrders);
         }
 
+        /// <summary>
+        /// Display payment history. 
+        /// Filter order information only for completed payment 
+        /// since every module selections are stored to database for 
+        /// analysis consumer behavior.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> PaymentHistory()
         {
             ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
@@ -180,6 +212,11 @@ namespace ImpactWebsite.Controllers
             return View(await _context.OrderHeaders.Where(m => m.UserId == userId).ToListAsync());
         }
 
+        /// <summary>
+        /// Get details of each order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -202,6 +239,10 @@ namespace ImpactWebsite.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Displays billing address for the logged in user.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> BillingAddress()
         {
             var userId = User.GetUserId();
@@ -211,6 +252,12 @@ namespace ImpactWebsite.Controllers
             return View(billingAddress);
         }
 
+        /// <summary>
+        /// Get billing address for the logged in user.
+        /// A user is able to have only one billing address, 
+        /// so any updates will overwrite the previous address.
+        /// </summary>
+        /// <returns></returns>              
         [HttpPost]
         public async Task<IActionResult> BillingAddress(BillingAddress billingAddress)
         {

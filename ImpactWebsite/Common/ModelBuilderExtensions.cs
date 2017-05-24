@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ImpactWebsite.Models
 {
+    /// <summary>
+    /// Remove plural table name so that it can be ethier plural or singular
+    /// Prevent any possible error causes due to names
+    /// </summary>
     public static class ModelBuilderExtensions
     {
         public static void RemovePluralizingTableNameConvention(this ModelBuilder modelBuilder)

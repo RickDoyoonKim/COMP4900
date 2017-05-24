@@ -24,7 +24,10 @@ namespace ImpactWebsite.UItests
         }
 
         /// <summary>
-        /// Test Register UI
+        /// Test UI related to Register.
+        /// This method automatically launch a browser with certain port
+        /// And automatically fill in sample inputs and click the register button.
+        /// With this automated UI test, save time from repetitive tasks.
         /// </summary>
         [TestMethod]
         public void CodedUITestMethod_Register()
@@ -42,6 +45,7 @@ namespace ImpactWebsite.UItests
 
         /// <summary>
         /// For button click (input type="submit")
+        /// This method clicks button that has button name as the string parameter.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="value"></param>
@@ -55,6 +59,7 @@ namespace ImpactWebsite.UItests
 
         /// <summary>
         /// For link click
+        /// This method clicks link that has link name as the string parameter.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="innerText"></param>
@@ -68,6 +73,7 @@ namespace ImpactWebsite.UItests
 
         /// <summary>
         /// For edit text
+        /// This method enters string parameter to the UITtest control, in this case, Textbox.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="id"></param>

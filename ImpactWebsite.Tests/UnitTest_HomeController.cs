@@ -22,6 +22,7 @@ namespace ImpactWebsite.Tests
         private readonly IServiceProvider _serviceProvider;
         private readonly ApplicationDbContext _context;
 
+        // Creates database  in memory only for unit testing.
         public UnitTest_HomeController()
         {
             var efServiceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
@@ -33,6 +34,10 @@ namespace ImpactWebsite.Tests
             _serviceProvider = services.BuildServiceProvider();
         }
 
+        /// <summary>
+        /// Connect to the home controller and check if the get request is sent correctly.
+        /// In this case when error happens.
+        /// </summary>
         [Fact]
         public void Error_ReturnsErrorView()
         {
@@ -50,6 +55,11 @@ namespace ImpactWebsite.Tests
             Assert.Equal(errorView, viewResult.ViewName);
         }
 
+
+        /// <summary>
+        /// Connects to home controller and check if the viewdata is correctly sent from
+        /// controller to view. In this case, viewdata in contact.
+        /// </summary>
         [Fact]
         public void Contact_ReturnsContactPage()
         {
@@ -60,20 +70,15 @@ namespace ImpactWebsite.Tests
 
             // Action
             var result = controller.Contact();
-            var viewBagResult = controller.ViewData["Message"];
+            var viewDataResult = controller.ViewData["Message"];
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
 
             Assert.Equal(contactView, viewResult.ViewName);
-            Assert.Equal(viewBagResult, "Your contact page.");
+            Assert.Equal(viewDataResult, "Your contact page.");
         }
     }
-
-
-
-
-
 
     /// <summary>
     /// Test Base web 
