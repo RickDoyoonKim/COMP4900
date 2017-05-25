@@ -49,7 +49,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav main-nav">
 
-                    <!-- Display menues for only admin role -->
                     @if (User.IsInRole("Admin"))
                     {
                         <li><a asp-area="" asp-controller="OrderHeaders" asp-action="Index" class="nav-menu">OrderID</a></li>
@@ -59,7 +58,6 @@
                         <li><a asp-area="" asp-controller="OrderModules" asp-action="Index">Modules</a></li>
                         <li><a asp-area="" asp-controller="Promotions" asp-action="Index">Promotion</a></li>
                     }
-                    <!-- Display menus for only user who logged in -->
                     else if (User.Identity.IsAuthenticated)
                     {
                         <li>
