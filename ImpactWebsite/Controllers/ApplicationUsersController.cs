@@ -116,7 +116,7 @@ namespace ImpactWebsite.Controllers
             return View(applicationUser);
         }
 
-        // GET: ApplicationUsers/Delete/5
+        // GET: ApplicationUsers/Delete/
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
