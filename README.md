@@ -3,16 +3,14 @@
 
 A web application using ASP.NET Core MVC
 
-Website: http://impactwebsite.azurewebsites.net/
-
 ## Project members
 
 | Name |
 |---|
+| Rick Kim |
 | Edward You |
 | Jake Kim |
 | Michael Park |
-| Rick Kim |
 
 
 
